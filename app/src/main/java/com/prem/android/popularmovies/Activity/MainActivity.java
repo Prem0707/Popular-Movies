@@ -1,10 +1,12 @@
-package com.prem.android.popularmovies;
+package com.prem.android.popularmovies.Activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.prem.android.popularmovies.R;
 
 public class MainActivity extends AppCompatActivity {
 
