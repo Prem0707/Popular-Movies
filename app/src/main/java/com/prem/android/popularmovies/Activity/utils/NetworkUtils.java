@@ -2,8 +2,12 @@ package com.prem.android.popularmovies.Activity.utils;
 
 import android.net.Uri;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Scanner;
 
 /**
  * Created by Prem on 17-07-2017.
@@ -50,8 +54,29 @@ public class NetworkUtils {
 
     /**
      * This method returns the entire result from the Http response
-     * 
+     * @params url The URL to fetch the HTTP response from.
+     *@returns The contents of Http response
+     * @throws IOException related to network and stream reading
      */
+
+    public static String getResponseFromHttpUrl(URL url) throws IOException {
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        try {
+            InputStream in = urlConnection.getInputStream();
+
+            Scanner scanner = new Scanner(in);
+            scanner.useDelimiter("\\A");
+
+            boolean hasInput = scanner.hasNext();
+            if (hasInput) {
+                return scanner.next();
+            } else {
+                return null;
+            }
+        } finally {
+            urlConnection.disconnect();
+        }
+    }
   }
 
 
