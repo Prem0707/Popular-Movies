@@ -1,5 +1,6 @@
 package com.prem.android.popularmovies.Activity.utils;
 
+import android.graphics.Movie;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -7,10 +8,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Created by Prem on 17-07-2017.
+ *
  * This is a Utils class that handles operation related to networking and fetches information
  * from the themoviedb by using API
  */
@@ -32,10 +35,10 @@ public class NetworkUtils {
 
 
     //Build the URL to query the movies sort selected by the user
-    public static URL buildURL(String POPULAR_MOVIES){
+    public static URL buildURL(String userSelectedCategory){
 
         Uri buildUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                .appendPath(POPULAR_MOVIES)
+                .appendPath(userSelectedCategory)
                 .appendQueryParameter(API_KEY_PARAM, API_KEY)
                 .build();
 
@@ -55,11 +58,11 @@ public class NetworkUtils {
     /**
      * This method returns the entire result from the Http response
      * @params url The URL to fetch the HTTP response from.
-     *@returns The contents of Http response
+     * @returns The contents of Http response
      * @throws IOException related to network and stream reading
      */
 
-    public static String getResponseFromHttpUrl(URL url) throws IOException {
+    public static ArrayList<Movie> getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
@@ -78,6 +81,3 @@ public class NetworkUtils {
         }
     }
   }
-
-
-
