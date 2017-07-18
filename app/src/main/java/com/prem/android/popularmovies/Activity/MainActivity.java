@@ -1,6 +1,5 @@
 package com.prem.android.popularmovies.Activity;
 
-import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.prem.android.popularmovies.Activity.utils.NetworkUtils;
+import com.prem.android.popularmovies.Activity.utils.TheMovieDbJsonUtils;
+import com.prem.android.popularmovies.Models.Movies;
 import com.prem.android.popularmovies.R;
+
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,28 +40,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movie>> {
+    private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movies>> {
 
         @Override
-        protected ArrayList<Movie> doInBackground(String... params) {
+        protected ArrayList<Movies> doInBackground(String... params) {
 
             String sortOptionSelected = params[0];
             URL urlForFetchMovieDetails = NetworkUtils.buildURL(sortOptionSelected);
 
-            ArrayList<Movie> responseFromAPI = null;
             if (urlForFetchMovieDetails != null) {
                 try {
-                    responseFromAPI = NetworkUtils.getResponseFromHttpUrl(urlForFetchMovieDetails);
-
-                } catch (IOException e) {
+                    String responseFromAPI = null;
+                    try {
+                        responseFromAPI = NetworkUtils.getResponseFromHttpUrl(urlForFetchMovieDetails);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return TheMovieDbJsonUtils.getMovieListFromJson(responseFromAPI);
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
             }
-            return responseFromAPI;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
+        protected void onPostExecute(ArrayList<Movies> movies) {
             super.onPostExecute(movies);
         }
     }

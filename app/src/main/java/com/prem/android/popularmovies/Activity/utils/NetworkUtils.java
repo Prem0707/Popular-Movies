@@ -1,6 +1,5 @@
 package com.prem.android.popularmovies.Activity.utils;
 
-import android.graphics.Movie;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -8,7 +7,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -62,7 +60,7 @@ public class NetworkUtils {
      * @throws IOException related to network and stream reading
      */
 
-    public static ArrayList<Movie> getResponseFromHttpUrl(URL url) throws IOException {
+    public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
