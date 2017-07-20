@@ -1,5 +1,5 @@
 package com.prem.android.popularmovies.Activity;
-
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,24 +9,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
 import com.prem.android.popularmovies.Models.Movies;
 import com.prem.android.popularmovies.R;
+import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
-
 import org.json.JSONException;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String userSelectedCategory = "popular";
     private MovieAdapter mMovieAdapter;
-    private RecyclerView mRecyclerView;
     private GridLayoutManager mGridLayoutManager;
 
 
@@ -37,25 +33,28 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        String userSelectedCategory = "popular";
         fetchMoviesOnlyIfDeviceOnline(userSelectedCategory);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mGridLayoutManager = new GridLayoutManager(this, 2); // 2 is no of Columns in Grid
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mGridLayoutManager = initializeGridLayoutManager();
 
-        mMovieAdapter = new MovieAdapter(this);
-        mRecyclerView.setAdapter(mMovieAdapter);
-    }
-
-    // we will only execute the FetchMoviesTask if device online.
-    private void fetchMoviesOnlyIfDeviceOnline(String urlEndpoint){
-        if (NetworkUtils.isDeviceOnline(this)) {
-            new FetchMovieTask().execute(urlEndpoint);
-        }else{
-            Toast.makeText(this,"Check your Network Connection", Toast.LENGTH_LONG).show();
+        if (mRecyclerView != null) {
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+            mMovieAdapter = new MovieAdapter(this);
+            mRecyclerView.setAdapter(mMovieAdapter);
         }
     }
 
+    private GridLayoutManager initializeGridLayoutManager() {
+        int deviceOrientation = CheckOrientation.getDeviceOrientation(this);
+
+        if (deviceOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            return new GridLayoutManager(this,2);
+        } else
+            return new GridLayoutManager(this,3);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,6 +63,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // we will only execute the FetchMoviesTask if device online.
+    private void fetchMoviesOnlyIfDeviceOnline(String urlEndpoint){
+        if (NetworkUtils.isDeviceOnline(this)) {
+            new FetchMovieTask().execute(urlEndpoint);
+        }else{
+            Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
+        }
+    }
 
     private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movies>> {
 
@@ -116,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

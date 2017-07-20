@@ -22,8 +22,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     private ArrayList<Movies> mMovieList;
     Context mContext;
 
-    public MovieAdapter(Context mainActivity) {
-        this.mContext = mainActivity;
+    public MovieAdapter(Context context){
+        this.mContext = context;
     }
 
 
@@ -44,10 +44,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.movies_list_raw;
         LayoutInflater inflater = LayoutInflater.from(context);
-        boolean shouldAttachToParentImmediately = false;
 
-        View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
-
+        View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new MovieAdapterViewHolder(view);
     }
 
