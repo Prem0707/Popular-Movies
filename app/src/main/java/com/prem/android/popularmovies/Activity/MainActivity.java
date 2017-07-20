@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        new FetchMovieTask().execute(userSelectedCategory);
+        fetchMoviesOnlyIfDeviceOnline(userSelectedCategory);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = new GridLayoutManager(this, 2); // 2 is no of Columns in Grid
@@ -45,6 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
         mMovieAdapter = new MovieAdapter(this);
         mRecyclerView.setAdapter(mMovieAdapter);
+    }
+
+    // we will only execute the FetchMoviesTask if device online.
+    private void fetchMoviesOnlyIfDeviceOnline(String urlEndpoint){
+        if (NetworkUtils.isDeviceOnline(this)) {
+            new FetchMovieTask().execute(urlEndpoint);
+        }else{
+            Toast.makeText(this,"Check your Network Connection", Toast.LENGTH_LONG).show();
+        }
     }
 
 

@@ -1,5 +1,8 @@
 package com.prem.android.popularmovies.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 
 import java.io.IOException;
@@ -86,6 +89,13 @@ public class NetworkUtils {
     // return a complete picasso url
     public static String buildPicassoUrl(String posterPathReturned) {
         return BASE_PICASSO_URL + IMAGE_SIZE + "/" + posterPathReturned;
+    }
+
+    // check if device is online
+    public static boolean isDeviceOnline(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
 }
