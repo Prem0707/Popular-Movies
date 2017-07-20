@@ -33,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String userSelectedCategory = "popular";
-        fetchMoviesOnlyIfDeviceOnline(userSelectedCategory);
+        fetchMoviesOnlyIfDeviceOnline(NetworkUtils.POPULAR_MOVIES);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = initializeGridLayoutManager();
@@ -120,7 +119,12 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_sort_by_popularity) {
+            fetchMoviesOnlyIfDeviceOnline(NetworkUtils.POPULAR_MOVIES);
+            return true;
+        }
+        else if (id == R.id.action_sort_by_top_rated){
+            fetchMoviesOnlyIfDeviceOnline(NetworkUtils.TOP_RATED_MOVIES);
             return true;
         }
         return super.onOptionsItemSelected(item);
