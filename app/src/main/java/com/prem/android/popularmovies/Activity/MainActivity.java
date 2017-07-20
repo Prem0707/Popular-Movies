@@ -3,14 +3,18 @@ package com.prem.android.popularmovies.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.prem.android.popularmovies.Activity.utils.NetworkUtils;
-import com.prem.android.popularmovies.Activity.utils.TheMovieDbJsonUtils;
+import com.prem.android.popularmovies.Adapters.MovieAdapter;
 import com.prem.android.popularmovies.Models.Movies;
 import com.prem.android.popularmovies.R;
+import com.prem.android.popularmovies.utils.NetworkUtils;
+import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
 
 import org.json.JSONException;
 
@@ -21,6 +25,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private final String userSelectedCategory = "popular";
+    private MovieAdapter mMovieAdapter;
+    private RecyclerView mRecyclerView;
+    private GridLayoutManager mGridLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +37,16 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        new FetchMovieTask().execute(userSelectedCategory);
 
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mGridLayoutManager = new GridLayoutManager(this, 2); // 2 is no of Columns in Grid
+        mRecyclerView.setLayoutManager(mGridLayoutManager);
+
+        mMovieAdapter = new MovieAdapter(this);
+        mRecyclerView.setAdapter(mMovieAdapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -60,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
             return null;
         }
@@ -68,6 +83,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Movies> movies) {
             super.onPostExecute(movies);
+            displayMoviesInGridLayout(movies);
+        }
+    }
+
+    private void displayMoviesInGridLayout(ArrayList<Movies> moviesList) {
+        if (moviesList != null) {
+            mMovieAdapter.setMovieList(moviesList);
+            mGridLayoutManager.scrollToPositionWithOffset(0, 0);
+        } else {
+            Toast.makeText(this, "Nothing in MovieList", Toast.LENGTH_LONG).show();
         }
     }
 
