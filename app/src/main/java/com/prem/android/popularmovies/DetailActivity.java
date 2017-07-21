@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Activity;
+package com.prem.android.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,32 +7,33 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.prem.android.popularmovies.Models.Movies;
-import com.prem.android.popularmovies.R;
+import com.prem.android.popularmovies.utils.FormatUtils;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView mTextView;
-    TextView mReleaseDate;
-    TextView mOverview;
-    TextView mRating;
-    ImageView mPosterImage;
+    private TextView mTextView;
+    private TextView mReleaseDate;
+    private TextView mOverview;
+    private TextView mRating;
+    private ImageView mPosterImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // Separate initilasation of UI component
+        // Separate initialisation of UI component
         initUiComponents();
 
         Intent intentThatStartedActivity = getIntent();
         Movies currentMovie = intentThatStartedActivity.getParcelableExtra(MainActivity.PARCELABLE_MOVIE);
         populateViews(currentMovie);
+
     }
 
-    void initUiComponents(){
+    private void initUiComponents(){
 
          mTextView =(TextView) findViewById(R.id.movie_title);
          mReleaseDate = (TextView) findViewById(R.id.release_date);
@@ -42,11 +43,11 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     //Populating data in views
-    void populateViews(Movies Movie){
+    private void populateViews(Movies Movie){
 
         mTextView.setText(Movie.getTitle());
         mReleaseDate.setText(Movie.getReleaseDate());
-        mRating.setText(Movie.getUserRating());
+        mRating.setText(FormatUtils.getFormattedRating(Movie.getUserRating()));
         mOverview.setText(Movie.getOverview());
 
         String picassoUrl = NetworkUtils.buildPicassoUrl(Movie.getPoster());

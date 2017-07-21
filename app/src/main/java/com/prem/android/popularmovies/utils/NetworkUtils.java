@@ -61,9 +61,9 @@ public class NetworkUtils {
     /**
      * This method returns the entire result from the Http response
      *
-     * @throws IOException related to network and stream reading
-     * @params url The URL to fetch the HTTP response from.
-     * @returns The contents of Http response
+     * throws IOException related to network and stream reading
+     * params url The URL to fetch the HTTP response from.
+     * returns The contents of Http response
      */
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {

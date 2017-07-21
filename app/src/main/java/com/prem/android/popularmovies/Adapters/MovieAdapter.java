@@ -16,12 +16,12 @@ import java.util.ArrayList;
 
 /**
  * Created by Prem on 19-07-2017.
+ * Adapter and viewHolder for RecyclerView
  */
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private ArrayList<Movies> mMovieList;
-    private MovieAdapterOnClickHandler mClickHandler;
-    Context mContext;
+    private final MovieAdapterOnClickHandler mClickHandler;
 
     public MovieAdapter( MovieAdapterOnClickHandler mHandler){
         this.mClickHandler = mHandler;

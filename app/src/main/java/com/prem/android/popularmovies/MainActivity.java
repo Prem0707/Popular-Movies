@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Activity;
+package com.prem.android.popularmovies;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
 import com.prem.android.popularmovies.Models.Movies;
-import com.prem.android.popularmovies.R;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     public static final String PARCELABLE_MOVIE = "parcelable_movie";
     private MovieAdapter mMovieAdapter;
-    private GridLayoutManager mGridLayoutManager;;
+    private GridLayoutManager mGridLayoutManager;
 
 
     @Override

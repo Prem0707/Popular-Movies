@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_setting">SettingActivity</string>
     <string name="description_movie_poster">movie poster</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="desc">movies_poster</string>
 </resources>

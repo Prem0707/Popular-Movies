@@ -5,21 +5,22 @@ import android.os.Parcelable;
 
 /**
  * Created by Prem on 18-07-2017.
+ *
  */
 public class Movies implements Parcelable{
 
     private String mTitle;
     private String mPoster;
     private String mOverview;
-    private String mReleseDate;
+    private String mReleaseDate;
     private String mUserRating;
 
 
-    protected Movies(Parcel in) {
+    private Movies(Parcel in) {
         mTitle = in.readString();
         mPoster = in.readString();
         mOverview = in.readString();
-        mReleseDate = in.readString();
+        mReleaseDate = in.readString();
         mUserRating = in.readString();
     }
 
@@ -45,7 +46,7 @@ public class Movies implements Parcelable{
         dest.writeString(mTitle);
         dest.writeString(mPoster);
         dest.writeString(mOverview);
-        dest.writeString(mReleseDate);
+        dest.writeString(mReleaseDate);
         dest.writeString(mUserRating);
     }
 
@@ -65,8 +66,8 @@ public class Movies implements Parcelable{
         this.mOverview = mOverview;
     }
 
-    public void setReleaseDate(String mReleseDate) {
-        this.mReleseDate = mReleseDate;
+    public void setReleaseDate(String mReleaseDate) {
+        this.mReleaseDate = mReleaseDate;
     }
 
     public void setUserRating(String mUserRating) {
@@ -86,7 +87,7 @@ public class Movies implements Parcelable{
     }
 
     public String getReleaseDate() {
-        return mReleseDate;
+        return mReleaseDate;
     }
 
     public String getUserRating() {

@@ -4,6 +4,7 @@ import android.content.Context;
 
 /**
  * Created by Prem on 20-07-2017.
+ * This class handles the device orientation
  */
 public class CheckOrientation {
 
