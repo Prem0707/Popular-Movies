@@ -1,5 +1,6 @@
 package com.prem.android.popularmovies.Activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
 
+
+    public static final String PARCELABLE_MOVIE = "parcelable_movie";
     private MovieAdapter mMovieAdapter;
     private GridLayoutManager mGridLayoutManager;;
 
@@ -78,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onMovieClick(Movies currentMovie) {
         Toast.makeText(this, currentMovie.getTitle(),Toast.LENGTH_LONG).show();
+        Intent goesToDetailActivity = new Intent(this,DetailActivity.class);
+        goesToDetailActivity.putExtra(PARCELABLE_MOVIE, currentMovie);
+        startActivity(goesToDetailActivity);
     }
 
     private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movies>> {
