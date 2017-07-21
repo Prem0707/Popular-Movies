@@ -1,4 +1,5 @@
 package com.prem.android.popularmovies.Activity;
+
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,21 +10,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
 import com.prem.android.popularmovies.Models.Movies;
 import com.prem.android.popularmovies.R;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
+
 import org.json.JSONException;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
 
     private MovieAdapter mMovieAdapter;
-    private GridLayoutManager mGridLayoutManager;
+    private GridLayoutManager mGridLayoutManager;;
 
 
     @Override
@@ -69,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onMovieClick(Movies currentMovie) {
+        Toast.makeText(this, currentMovie.getTitle(),Toast.LENGTH_LONG).show();
     }
 
     private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movies>> {

@@ -20,22 +20,33 @@ import java.util.ArrayList;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapterViewHolder> {
 
     private ArrayList<Movies> mMovieList;
+    private MovieAdapterOnClickHandler mClickHandler;
     Context mContext;
 
-    public MovieAdapter(Context context){
-        this.mContext = context;
+    public MovieAdapter( MovieAdapterOnClickHandler mHandler){
+        this.mClickHandler = mHandler;
     }
 
-
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder {
+    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder  {
 
         public final ImageView mMovieImageView;
 
         public MovieAdapterViewHolder(View itemView) {
             super(itemView);
             mMovieImageView = (ImageView) itemView.findViewById(R.id.image_in_gridview);
-        }
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickHandler.onMovieClick(mMovieList.get(getAdapterPosition()));
+                }
+            });
+        }
+        
+    }
+
+    public interface MovieAdapterOnClickHandler {
+        void onMovieClick(Movies currentMovie);
     }
 
     // Called when RecyclerView instantiates a new ViewHolder instance.
