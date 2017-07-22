@@ -28,8 +28,8 @@ public class NetworkUtils {
     private static final String BASE_PICASSO_URL = "http://image.tmdb.org/t/p/";
 
     //Methods we want to use
-    public static final String POPULAR_MOVIES = "popular";
-    public static final String TOP_RATED_MOVIES = "top_rated";
+    public static final String POPULAR_MOVIES_SORT_SELECTION = "popular";
+    public static final String TOP_RATED_MOVIES_SORT_SELECTION= "top_rated";
 
     //Query paths
     private static final String API_KEY_PARAM = "api_key";
@@ -91,7 +91,7 @@ public class NetworkUtils {
     }
 
     // check if device is online
-    public static boolean isDeviceOnline(Context context) {
+    public static boolean checkDeviceOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();

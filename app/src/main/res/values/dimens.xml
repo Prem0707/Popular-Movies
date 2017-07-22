@@ -4,10 +4,5 @@
     <dimen name="text_movie_title_portrait">40sp</dimen>
     <dimen name="text_movie_detail_large">24sp</dimen>
 
-    <dimen name="spacing_movie_container">16dp</dimen>
-    <dimen name="spacing_vertical_large">32dp</dimen>
-    <dimen name="spacing_vertical_medium">16dp</dimen>
-    <dimen name="spacing_vertical_small">8dp</dimen>
-    <dimen name="spacing_horizontal_medium">16dp</dimen>
 
 </resources>

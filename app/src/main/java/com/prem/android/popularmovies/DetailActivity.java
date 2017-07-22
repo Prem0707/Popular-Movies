@@ -36,22 +36,23 @@ public class DetailActivity extends AppCompatActivity {
     private void initUiComponents(){
 
          mTextView =(TextView) findViewById(R.id.movie_title);
+         mPosterImage = (ImageView) findViewById(R.id.movie_poster);
          mReleaseDate = (TextView) findViewById(R.id.release_date);
          mOverview = (TextView) findViewById(R.id.overview_of_movie);
          mRating = (TextView) findViewById(R.id.rating);
-         mPosterImage = (ImageView) findViewById(R.id.movie_poster);
+
     }
 
     //Populating data in views
     private void populateViews(Movies Movie){
 
         mTextView.setText(Movie.getTitle());
+        String picassoUrl = NetworkUtils.buildPicassoUrl(Movie.getPoster());
+        Picasso.with(this).load(picassoUrl).into(mPosterImage);
         mReleaseDate.setText(Movie.getReleaseDate());
         mRating.setText(FormatUtils.getFormattedRating(Movie.getUserRating()));
         mOverview.setText(Movie.getOverview());
 
-        String picassoUrl = NetworkUtils.buildPicassoUrl(Movie.getPoster());
-        Picasso.with(this).load(picassoUrl).into(mPosterImage);
 
     }
 }

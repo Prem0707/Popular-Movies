@@ -8,7 +8,7 @@ import android.content.Context;
  */
 public class CheckOrientation {
 
-    public static int getDeviceOrientation(Context context){
+    public static int checkDeviceOrientation(Context context){
         return context.getResources().getConfiguration().orientation;
     }
 }

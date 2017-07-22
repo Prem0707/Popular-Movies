@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fetchMoviesOnlyIfDeviceOnline(NetworkUtils.POPULAR_MOVIES);
+        fetchMoviesIfDeviceOnline(NetworkUtils.POPULAR_MOVIES_SORT_SELECTION);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = initializeGridLayoutManager();
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     private GridLayoutManager initializeGridLayoutManager() {
-        int deviceOrientation = CheckOrientation.getDeviceOrientation(this);
+        int deviceOrientation = CheckOrientation.checkDeviceOrientation(this);
 
         if (deviceOrientation == Configuration.ORIENTATION_PORTRAIT) {
             return new GridLayoutManager(this,2);
@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     // we will only execute the FetchMoviesTask if device online.
-    private void fetchMoviesOnlyIfDeviceOnline(String urlEndpoint){
-        if (NetworkUtils.isDeviceOnline(this)) {
+    private void fetchMoviesIfDeviceOnline(String urlEndpoint){
+        if (NetworkUtils.checkDeviceOnline(this)) {
             new FetchMovieTask().execute(urlEndpoint);
         }else{
             Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
@@ -134,11 +134,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort_by_popularity) {
-            fetchMoviesOnlyIfDeviceOnline(NetworkUtils.POPULAR_MOVIES);
+            fetchMoviesIfDeviceOnline(NetworkUtils.POPULAR_MOVIES_SORT_SELECTION);
             return true;
         }
         else if (id == R.id.action_sort_by_top_rated){
-            fetchMoviesOnlyIfDeviceOnline(NetworkUtils.TOP_RATED_MOVIES);
+            fetchMoviesIfDeviceOnline(NetworkUtils.TOP_RATED_MOVIES_SORT_SELECTION);
             return true;
         }
         return super.onOptionsItemSelected(item);
