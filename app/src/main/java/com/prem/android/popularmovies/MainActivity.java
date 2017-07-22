@@ -26,8 +26,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
 
-
-    public static final String PARCELABLE_MOVIE = "parcelable_movie";
+    public static final String CURRENT_MOVIE_DATA = "current_movie_data";
     private MovieAdapter mMovieAdapter;
     private GridLayoutManager mGridLayoutManager;
 
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         fetchMoviesIfDeviceOnline(NetworkUtils.POPULAR_MOVIES_SORT_SELECTION);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mGridLayoutManager = initializeGridLayoutManager();
+        mGridLayoutManager = gridLayoutManagerAccordingToOrientation();
 
         if (mRecyclerView != null) {
             mRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
     }
 
-    private GridLayoutManager initializeGridLayoutManager() {
+    private GridLayoutManager gridLayoutManagerAccordingToOrientation() {
         int deviceOrientation = CheckOrientation.checkDeviceOrientation(this);
 
         if (deviceOrientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onMovieClick(Movies currentMovie) {
         Toast.makeText(this, currentMovie.getTitle(),Toast.LENGTH_LONG).show();
         Intent goesToDetailActivity = new Intent(this,DetailActivity.class);
-        goesToDetailActivity.putExtra(PARCELABLE_MOVIE, currentMovie);
+        goesToDetailActivity.putExtra(CURRENT_MOVIE_DATA, currentMovie);
         startActivity(goesToDetailActivity);
     }
 

@@ -9,4 +9,5 @@ public class FormatUtils {
     public static  String getFormattedRating(String rating){
         return rating + "/" + "10";
     }
+
 }

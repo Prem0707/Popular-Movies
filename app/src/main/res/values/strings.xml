@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="description_movie_poster">movie poster</string>
     <string name="most_popular">Most Popular</string>
     <string name="top_rated">Top Rated</string>
     <string name="desc">movies_poster</string>
+    <string name="medium_text">Medium Text</string>
+    <string name="large_text">Large Text</string>
+    <string name="con_des">null</string>
+
 </resources>

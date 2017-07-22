@@ -13,46 +13,29 @@ import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private TextView mTextView;
-    private TextView mReleaseDate;
-    private TextView mOverview;
-    private TextView mRating;
-    private ImageView mPosterImage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        // Separate initialisation of UI component
-        initUiComponents();
+        //Initialisation of UI components
+        TextView mTextView =(TextView) findViewById(R.id.movie_title);
+        ImageView mPosterImage = (ImageView) findViewById(R.id.movie_poster);
+        TextView mReleaseDate = (TextView) findViewById(R.id.release_date);
+        TextView mOverview = (TextView) findViewById(R.id.overview_of_movie);
+        TextView mRating = (TextView) findViewById(R.id.rating);
 
         Intent intentThatStartedActivity = getIntent();
-        Movies currentMovie = intentThatStartedActivity.getParcelableExtra(MainActivity.PARCELABLE_MOVIE);
-        populateViews(currentMovie);
+        Movies currentMovie = intentThatStartedActivity.getParcelableExtra(MainActivity.CURRENT_MOVIE_DATA);
 
-    }
-
-    private void initUiComponents(){
-
-         mTextView =(TextView) findViewById(R.id.movie_title);
-         mPosterImage = (ImageView) findViewById(R.id.movie_poster);
-         mReleaseDate = (TextView) findViewById(R.id.release_date);
-         mOverview = (TextView) findViewById(R.id.overview_of_movie);
-         mRating = (TextView) findViewById(R.id.rating);
-
-    }
-
-    //Populating data in views
-    private void populateViews(Movies Movie){
-
-        mTextView.setText(Movie.getTitle());
-        String picassoUrl = NetworkUtils.buildPicassoUrl(Movie.getPoster());
+        // Populating views
+        mTextView.setText(currentMovie.getTitle());
+        String picassoUrl = NetworkUtils.buildPicassoUrl(currentMovie.getPoster());
         Picasso.with(this).load(picassoUrl).into(mPosterImage);
-        mReleaseDate.setText(Movie.getReleaseDate());
-        mRating.setText(FormatUtils.getFormattedRating(Movie.getUserRating()));
-        mOverview.setText(Movie.getOverview());
-
+        mReleaseDate.setText(currentMovie.getReleaseDate());
+        mRating.setText(FormatUtils.getFormattedRating(currentMovie.getUserRating()));
+        mOverview.setText(currentMovie.getOverview());
 
     }
+
 }
