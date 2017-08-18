@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
 import com.prem.android.popularmovies.Models.Movies;
 import com.prem.android.popularmovies.utils.CheckOrientation;
+import com.prem.android.popularmovies.utils.Constants;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
 
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
 
-    public static final String CURRENT_MOVIE_DATA = "current_movie_data";
     private MovieAdapter mMovieAdapter;
     private GridLayoutManager mGridLayoutManager;
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onMovieClick(Movies currentMovie) {
         Toast.makeText(this, currentMovie.getTitle(),Toast.LENGTH_LONG).show();
         Intent goesToDetailActivity = new Intent(this,DetailActivity.class);
-        goesToDetailActivity.putExtra(CURRENT_MOVIE_DATA, currentMovie);
+        goesToDetailActivity.putExtra(Constants.CURRENT_MOVIE_DATA, currentMovie);
         startActivity(goesToDetailActivity);
     }
 

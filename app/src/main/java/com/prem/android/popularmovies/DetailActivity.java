@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.utils.Constants;
 import com.prem.android.popularmovies.utils.FormatUtils;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
@@ -29,7 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         Intent intentThatStartedActivity = getIntent();
-        Movies currentMovie = intentThatStartedActivity.getParcelableExtra(MainActivity.CURRENT_MOVIE_DATA);
+        Movies currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
 
         // Populating views
         mTextView.setText(currentMovie.getTitle());
