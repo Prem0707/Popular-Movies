@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fetchMoviesIfDeviceOnline(NetworkUtils.POPULAR_MOVIES_SORT_SELECTION);
+        fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = gridLayoutManagerAccordingToOrientation();
@@ -133,11 +133,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_sort_by_popularity) {
-            fetchMoviesIfDeviceOnline(NetworkUtils.POPULAR_MOVIES_SORT_SELECTION);
+            fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
             return true;
         }
         else if (id == R.id.action_sort_by_top_rated){
-            fetchMoviesIfDeviceOnline(NetworkUtils.TOP_RATED_MOVIES_SORT_SELECTION);
+            fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
             return true;
         }
         return super.onOptionsItemSelected(item);

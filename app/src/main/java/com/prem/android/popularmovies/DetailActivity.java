@@ -35,11 +35,10 @@ public class DetailActivity extends AppCompatActivity {
         // Populating views
         mTextView.setText(currentMovie.getTitle());
         String picassoUrl = NetworkUtils.buildPicassoUrl(currentMovie.getPoster());
-        Picasso.with(this).load(picassoUrl).placeholder(R.mipmap.placeholder).into(mPosterImage);
+        Picasso.with(this).load(picassoUrl).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(mPosterImage);
         mReleaseDate.setText(currentMovie.getReleaseDate());
         mRating.setText(FormatUtils.getFormattedRating(currentMovie.getUserRating()));
         mOverview.setText(currentMovie.getOverview());
 
     }
-
 }

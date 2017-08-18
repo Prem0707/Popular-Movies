@@ -20,29 +20,12 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    //Key - Add your API Key here
-    private static final String API_KEY = "89cf5fe65a50f63e8186c52216610f37";
-
-    //Base URL
-    private static final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/movie";
-    private static final String BASE_PICASSO_URL = "http://image.tmdb.org/t/p/";
-
-    //Methods we want to use
-    public static final String POPULAR_MOVIES_SORT_SELECTION = "popular";
-    public static final String TOP_RATED_MOVIES_SORT_SELECTION= "top_rated";
-
-    //Query paths
-    private static final String API_KEY_PARAM = "api_key";
-
-    private static final String IMAGE_SIZE = "w185";
-
-
     //Build the URL to query the movies sort selected by the user
     public static URL buildURL(String userSelectedCategory) {
 
-        Uri buildUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
+        Uri buildUrl = Uri.parse(Constants.MOVIE_BASE_URL).buildUpon()
                 .appendPath(userSelectedCategory)
-                .appendQueryParameter(API_KEY_PARAM, API_KEY)
+                .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY)
                 .build();
 
         return convertAndroidUrltoJavaUrl(buildUrl);
@@ -87,7 +70,7 @@ public class NetworkUtils {
 
     // return a complete picasso url
     public static String buildPicassoUrl(String posterPathReturned) {
-        return BASE_PICASSO_URL + IMAGE_SIZE + "/" + posterPathReturned;
+        return Constants.BASE_PICASSO_URL + Constants.IMAGE_SIZE + "/" + posterPathReturned;
     }
 
     // check if device is online
