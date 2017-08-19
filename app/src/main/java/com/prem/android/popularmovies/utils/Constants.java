@@ -13,6 +13,7 @@ public class Constants {
     public static final String THUMBNAIL_OF_MOVIE = "poster_path";
     public static final String RELEASE_DATE = "release_date";
     public static final String RATING_OF_MOVIE = "vote_average";
+    public static final String ID_OF_MOVIE = "id";
 
     public static final String CURRENT_MOVIE_DATA = "current_movie_data";
 

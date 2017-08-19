@@ -11,6 +11,6 @@ import java.util.ArrayList;
 public interface TaskCompleted {
 
     // Define data you like to return from AysncTask
-    public void onTaskCompleted(ArrayList<Movies> movies);
+     void onTaskCompleted(ArrayList<Movies> movies);
 
 }

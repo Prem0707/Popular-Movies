@@ -14,6 +14,7 @@ public class Movies implements Parcelable{
     private String mOverview;
     private String mReleaseDate;
     private String mUserRating;
+    private int mMovieId;
 
 
     private Movies(Parcel in) {
@@ -43,6 +44,7 @@ public class Movies implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        // Taking the parcel object and saving all data of it into instance variables
         dest.writeString(mTitle);
         dest.writeString(mPoster);
         dest.writeString(mOverview);
@@ -74,6 +76,10 @@ public class Movies implements Parcelable{
         this.mUserRating = mUserRating;
     }
 
+    public void setIdMovie(int mMovieId){
+        this.mMovieId = mMovieId;
+    }
+
     public String getTitle() {
         return mTitle;
     }
@@ -92,6 +98,10 @@ public class Movies implements Parcelable{
 
     public String getUserRating() {
         return mUserRating;
+    }
+
+    public int getmMovieId(){
+        return mMovieId;
     }
 
 }
