@@ -2,7 +2,6 @@ package com.prem.android.popularmovies;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,22 +12,19 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
+import com.prem.android.popularmovies.Interfaces.TaskCompleted;
 import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.utils.AsyncReuse;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.Constants;
 import com.prem.android.popularmovies.utils.NetworkUtils;
-import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, TaskCompleted{
 
-    private MovieAdapter mMovieAdapter;
-    private GridLayoutManager mGridLayoutManager;
+    private static MovieAdapter mMovieAdapter;
+    private static GridLayoutManager mGridLayoutManager;
 
 
     @Override
@@ -70,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     // we will only execute the FetchMoviesTask if device online.
     private void fetchMoviesIfDeviceOnline(String urlEndpoint){
         if (NetworkUtils.checkDeviceOnline(this)) {
-            new FetchMovieTask().execute(urlEndpoint);
+            new AsyncReuse(MainActivity.this).execute(urlEndpoint);
         }else{
             Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
         }
@@ -84,43 +80,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(goesToDetailActivity);
     }
 
-    private class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movies>> {
-
-        @Override
-        protected ArrayList<Movies> doInBackground(String... params) {
-
-            String sortOptionSelected = params[0];
-            URL urlForFetchMovieDetails = NetworkUtils.buildURL(sortOptionSelected);
-
-            if (urlForFetchMovieDetails != null) {
-                try {
-                    String responseFromAPI = null;
-                    try {
-                        responseFromAPI = NetworkUtils.getResponseFromHttpUrl(urlForFetchMovieDetails);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return TheMovieDbJsonUtils.getMovieListFromJson(responseFromAPI);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movies> movies) {
-            super.onPostExecute(movies);
-            displayMoviesInGridLayout(movies);
-        }
-    }
-
-    private void displayMoviesInGridLayout(ArrayList<Movies> moviesList) {
+    public static void displayMoviesInGridLayout(ArrayList<Movies> moviesList) {
         if (moviesList != null) {
             mMovieAdapter.setMovieList(moviesList);
             mGridLayoutManager.scrollToPositionWithOffset(0, 0);
-        } else {
-            Toast.makeText(this, "Nothing in MovieList", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -141,5 +104,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTaskCompleted(ArrayList<Movies> movies) {
+        MainActivity.displayMoviesInGridLayout(movies);
     }
 }
