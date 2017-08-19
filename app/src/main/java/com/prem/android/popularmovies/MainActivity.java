@@ -95,12 +95,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_sort_by_popularity) {
-            fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
+        if (id == R.id.action_settings) {
+            Intent startsSettingsActivity = new Intent(this,SettingsActivity.class);
+            startActivity(startsSettingsActivity);
             return true;
         }
-        else if (id == R.id.action_sort_by_top_rated){
-            fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
+        else if (id == R.id.about_the_app){
+            Intent startsAboutApp = new Intent(this, AboutActivity.class);
+            startActivity(startsAboutApp);
             return true;
         }
         return super.onOptionsItemSelected(item);

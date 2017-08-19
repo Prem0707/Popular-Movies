@@ -26,6 +26,8 @@ dependencies {
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile "com.squareup.picasso:picasso:2.4.0"
+    compile 'com.android.support:preference-v7:25.3.1'
+
 
     // for use of ButterKnife
     compile 'com.jakewharton:butterknife:8.4.0'

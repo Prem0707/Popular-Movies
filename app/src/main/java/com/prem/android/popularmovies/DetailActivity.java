@@ -2,7 +2,9 @@ package com.prem.android.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +30,11 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
+        android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
+
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent intentThatStartedActivity = getIntent();
         Movies currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
@@ -40,5 +47,15 @@ public class DetailActivity extends AppCompatActivity {
         mRating.setText(FormatUtils.getFormattedRating(currentMovie.getUserRating()));
         mOverview.setText(currentMovie.getOverview());
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menu){
+        int id = menu.getItemId();
+
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
+        return super.onOptionsItemSelected(menu);
     }
 }
