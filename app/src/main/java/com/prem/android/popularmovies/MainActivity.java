@@ -1,6 +1,7 @@
 package com.prem.android.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +22,12 @@ import com.prem.android.popularmovies.utils.NetworkUtils;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler, TaskCompleted{
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
+        TaskCompleted, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static MovieAdapter mMovieAdapter;
     private static GridLayoutManager mGridLayoutManager;
+
 
 
     @Override
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
+        fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = gridLayoutManagerAccordingToOrientation();
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mMovieAdapter = new MovieAdapter(this);
             mRecyclerView.setAdapter(mMovieAdapter);
         }
+
+        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     private GridLayoutManager gridLayoutManagerAccordingToOrientation() {
@@ -111,5 +117,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onTaskCompleted(ArrayList<Movies> movies) {
         MainActivity.displayMoviesInGridLayout(movies);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals(getString(R.string.pref_sort_by_rating))){
+            fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
+
+        } else if(key.equals(getString(R.string.pref_sort_by_popularity))){
+            fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
+        }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 }
