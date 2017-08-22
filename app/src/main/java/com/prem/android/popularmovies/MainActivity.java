@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,20 +16,24 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
-import com.prem.android.popularmovies.Interfaces.TaskCompleted;
 import com.prem.android.popularmovies.Models.Movies;
-import com.prem.android.popularmovies.utils.AsyncReuse;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.Constants;
 import com.prem.android.popularmovies.utils.NetworkUtils;
+import com.prem.android.popularmovies.utils.TheMovieDbJsonUtils;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
-        TaskCompleted, SharedPreferences.OnSharedPreferenceChangeListener{
+        LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static MovieAdapter mMovieAdapter;
     private static GridLayoutManager mGridLayoutManager;
+    private static final String POPULAR_MOVIES_LOADER = "22";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +76,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     // we will only execute the FetchMoviesTask if device online.
     private void fetchMoviesIfDeviceOnline(String urlEndpoint){
         if (NetworkUtils.checkDeviceOnline(this)) {
-            new AsyncReuse(MainActivity.this).execute(urlEndpoint);
+            Bundle queryBundle = new Bundle();
+            queryBundle.putString(String.valueOf(POPULAR_MOVIES_LOADER),urlEndpoint);
+
+            LoaderManager loaderManager = getSupportLoaderManager();
+            Loader<ArrayList<Movies>> popMoviesLoader = loaderManager.getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
+            if(popMoviesLoader == null){
+                loaderManager.initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle,this);
+            }
+            else{
+                loaderManager.restartLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
+            }
         }else{
             Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
         }
@@ -112,11 +129,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
-    public void onTaskCompleted(ArrayList<Movies> movies) {
-        displayMoviesInGridLayout(movies);
-    }
-
-    @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if(key.equals(getString(R.string.pref_sort_by_rating))){
@@ -133,4 +145,56 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         android.support.v7.preference.PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
+
+    // Implementing AsyncTakLoader instead of AsyncTask to avoid zombies activity creation whenever device is rotated.
+    @Override
+    public Loader<ArrayList<Movies>> onCreateLoader(int id, final Bundle args) {
+
+        return new AsyncTaskLoader<ArrayList<Movies>>(this) {
+
+            @Override
+            public void onStartLoading() {
+                super.onStartLoading();
+                if (args == null) {
+                    return;
+                }
+            }
+
+            @Override
+            public ArrayList<Movies> loadInBackground() {
+                String movieUrlEndpoint = args.getString(POPULAR_MOVIES_LOADER);
+                if (movieUrlEndpoint == null) {
+                    return null;
+                }
+                URL urlForFetchMovieDetails = NetworkUtils.buildURL(movieUrlEndpoint);
+
+                if (urlForFetchMovieDetails != null) {
+                    try {
+                        String responseFromAPI = null;
+                        try {
+                            responseFromAPI = NetworkUtils.getResponseFromHttpUrl(urlForFetchMovieDetails);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return TheMovieDbJsonUtils.getMovieListFromJson(responseFromAPI);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
+        displayMoviesInGridLayout(data);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
+
+    }
+
 }

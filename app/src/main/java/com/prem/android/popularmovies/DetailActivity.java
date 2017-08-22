@@ -74,9 +74,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId())
         {
             case R.id.movie_reviews:
-                Intent reviewsIntent = new Intent(this, ReviewActivity.class);
-                reviewsIntent.putExtra(Constants.DETAIL_TO_REVIEW, mMovieId);
-                startActivity(reviewsIntent);
                 break;
 
             case R.id.movie_trailers:
