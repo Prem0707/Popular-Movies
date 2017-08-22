@@ -76,20 +76,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     // we will only execute the FetchMoviesTask if device online.
     private void fetchMoviesIfDeviceOnline(String urlEndpoint){
         if (NetworkUtils.checkDeviceOnline(this)) {
+
             Bundle queryBundle = new Bundle();
             queryBundle.putString(String.valueOf(POPULAR_MOVIES_LOADER),urlEndpoint);
-
             LoaderManager loaderManager = getSupportLoaderManager();
             Loader<ArrayList<Movies>> popMoviesLoader = loaderManager.getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
+
             if(popMoviesLoader == null){
                 loaderManager.initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle,this);
-            }
-            else{
+            } else {
                 loaderManager.restartLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
             }
-        }else{
+        } else{
             Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
-        }
+          }
     }
 
     @Override
@@ -98,13 +98,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Intent goesToDetailActivity = new Intent(this,DetailActivity.class);
         goesToDetailActivity.putExtra(Constants.CURRENT_MOVIE_DATA, currentMovie);
         startActivity(goesToDetailActivity);
-    }
-
-    public void displayMoviesInGridLayout(ArrayList<Movies> moviesList) {
-        if (moviesList != null) {
-            mMovieAdapter.setMovieList(moviesList);
-            mGridLayoutManager.scrollToPositionWithOffset(0, 0);
-        }
     }
 
     @Override
@@ -152,20 +145,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         return new AsyncTaskLoader<ArrayList<Movies>>(this) {
 
+            /* This ArrayList will hold and help cache our  data */
+            ArrayList<Movies> mMoviesData = null;
+
             @Override
             public void onStartLoading() {
                 super.onStartLoading();
-                if (args == null) {
-                    return;
+                if (mMoviesData != null) {
+                    deliverResult(mMoviesData);
                 }
+
             }
 
             @Override
             public ArrayList<Movies> loadInBackground() {
                 String movieUrlEndpoint = args.getString(POPULAR_MOVIES_LOADER);
-                if (movieUrlEndpoint == null) {
-                    return null;
-                }
+
                 URL urlForFetchMovieDetails = NetworkUtils.buildURL(movieUrlEndpoint);
 
                 if (urlForFetchMovieDetails != null) {
@@ -183,12 +178,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 }
                 return null;
             }
-        };
+
+        /**
+         * Sends the result of the load to the registered listener.
+         *
+         * @param data The result of the load
+         */
+          public void deliverResult(ArrayList<Movies> data) {
+             mMoviesData = data;
+              super.deliverResult(data);
+          }
+     };
+
     }
 
     @Override
-    public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> data) {
-        displayMoviesInGridLayout(data);
+    public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> moviesList) {
+        mMovieAdapter.setMovieList(moviesList);
+        mGridLayoutManager.scrollToPositionWithOffset(0, 0);
 
     }
 
