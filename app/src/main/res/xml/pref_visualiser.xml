@@ -8,7 +8,7 @@
             android:title="Sort By Rating" />
 
     <CheckBoxPreference
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:id="@+id/sort_by_pop"
         android:key="sort_by_popularity"
         android:title="Sort By Popularity"/>

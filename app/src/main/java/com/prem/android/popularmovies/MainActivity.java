@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static MovieAdapter mMovieAdapter;
     private static GridLayoutManager mGridLayoutManager;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return new GridLayoutManager(this,3);
 
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -86,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(goesToDetailActivity);
     }
 
-    public static void displayMoviesInGridLayout(ArrayList<Movies> moviesList) {
+    public void displayMoviesInGridLayout(ArrayList<Movies> moviesList) {
         if (moviesList != null) {
             mMovieAdapter.setMovieList(moviesList);
             mGridLayoutManager.scrollToPositionWithOffset(0, 0);
@@ -116,11 +113,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onTaskCompleted(ArrayList<Movies> movies) {
-        MainActivity.displayMoviesInGridLayout(movies);
+        displayMoviesInGridLayout(movies);
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
         if(key.equals(getString(R.string.pref_sort_by_rating))){
             fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
 

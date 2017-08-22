@@ -23,6 +23,7 @@ public class Movies implements Parcelable{
         mOverview = in.readString();
         mReleaseDate = in.readString();
         mUserRating = in.readString();
+        mMovieId = in.readInt();
     }
 
     public static final Creator<Movies> CREATOR = new Creator<Movies>() {
@@ -50,6 +51,7 @@ public class Movies implements Parcelable{
         dest.writeString(mOverview);
         dest.writeString(mReleaseDate);
         dest.writeString(mUserRating);
+        dest.writeInt(mMovieId);
     }
 
 

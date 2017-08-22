@@ -34,7 +34,7 @@ public class TheMovieDbJsonUtils {
             currentMovie.setReleaseDate(objectOfReaderArray.getString(Constants.RELEASE_DATE));
             currentMovie.setUserRating(objectOfReaderArray.getString(Constants.RATING_OF_MOVIE));
             currentMovie.setOverview(objectOfReaderArray.getString(Constants.OVERVIEW_OF_MOVIE));
-            currentMovie.setIdMovie(objectOfReaderArray.getInt(String.valueOf(Constants.ID_OF_MOVIE)));
+            currentMovie.setIdMovie(objectOfReaderArray.getInt(Constants.ID_OF_MOVIE));
 
             movieList.add(currentMovie);
         }
