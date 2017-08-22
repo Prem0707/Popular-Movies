@@ -153,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 super.onStartLoading();
                 if (mMoviesData != null) {
                     deliverResult(mMoviesData);
+                } else{
+                    forceLoad();
                 }
 
             }
