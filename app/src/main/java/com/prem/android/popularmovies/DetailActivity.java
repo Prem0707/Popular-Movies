@@ -46,6 +46,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         Intent intentThatStartedActivity = getIntent();
         Movies currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
 
+
         // Populating views
         mTextView.setText(currentMovie.getTitle());
         String picassoUrl = NetworkUtils.buildPicassoUrl(currentMovie.getPoster());

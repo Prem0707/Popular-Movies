@@ -49,6 +49,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/black" />
 
+
             <TextView
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"

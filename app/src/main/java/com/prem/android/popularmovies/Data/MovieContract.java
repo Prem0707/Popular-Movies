@@ -4,6 +4,7 @@ import android.provider.BaseColumns;
 
 /**
  * Created by Prem on 22-08-2017.
+ * It is designed to keep track of all the constants that will help to access data in given database.
  */
 public class MovieContract {
 
@@ -16,7 +17,7 @@ public class MovieContract {
 
         //Movie table contents
         public static final String MOVIE_ID = "id";
-        public static final String MOOVIE_POSTER_PATH = "poster_path";
+        public static final String MOVIE_POSTER_PATH = "poster_path";
         public static final String MOVIE_TITLE = "title";
         public static final String MOVIE_DESCRIPTION = "description";
         public static final String MOVIE_RATING = "rating";
