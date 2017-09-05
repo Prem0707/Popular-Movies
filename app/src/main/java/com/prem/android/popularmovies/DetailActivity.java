@@ -1,6 +1,5 @@
 package com.prem.android.popularmovies;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +10,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.prem.android.popularmovies.Interfaces.TaskCompleted;
 import com.prem.android.popularmovies.Json_Parser.ReviewsParser;
@@ -39,6 +38,7 @@ public class DetailActivity extends AppCompatActivity implements
                        LoaderManager.LoaderCallbacks<ArrayList<Reviews>> ,TaskCompleted, View.OnClickListener{
 
     String mMovieId;
+    ArrayList<String> idOfVideos = new ArrayList<>();
 
     @BindView( R.id.movie_title) TextView mTextView;
     @BindView(R.id.release_date) TextView mReleaseDate;
@@ -46,10 +46,10 @@ public class DetailActivity extends AppCompatActivity implements
     @BindView(R.id.overview_of_movie) TextView mOverview;
     @BindView(R.id.rating) TextView mRating;
     @BindView(R.id.review_of_movie) TextView mReviewMovies;
-    @BindView(R.id.keys) TextView mKeys;
 
     private static String ID_OF_MOVIE;
     private static final int MOVIE_REVIEW_LOADER = 10;
+    Button mTrailors_1, mTrailors_2, mTrailors_3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,13 @@ public class DetailActivity extends AppCompatActivity implements
         Intent intentThatStartedActivity = getIntent();
         Movies currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
 
+        // Initialisation of buttons
+        mTrailors_1 = (Button) findViewById(R.id.tralors_1);
+        mTrailors_2 = (Button) findViewById(R.id.tralors_2);
+        mTrailors_3 = (Button) findViewById(R.id.tralors_3);
+        mTrailors_1.setOnClickListener(this);
+        mTrailors_2.setOnClickListener(this);
+        mTrailors_3.setOnClickListener(this);
 
         // Populating views
         mTextView.setText(currentMovie.getTitle());
@@ -75,7 +82,7 @@ public class DetailActivity extends AppCompatActivity implements
         mOverview.setText(currentMovie.getOverview());
         this.mMovieId = Integer.toString(currentMovie.getmMovieId());
 
-        Toast.makeText(this, mMovieId, Toast.LENGTH_LONG).show();
+
 
         // AsyncTask for Trailers
         AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
@@ -202,38 +209,54 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public void onTaskCompleted(ArrayList<Trailers> moviesTrailers) {
-
-
-
-    }
-
-    public void watchYoutubeVideo(String id){
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
-        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                Uri.parse("http://www.youtube.com/watch?v=" + id));
-        try {
-            startActivity(appIntent);
-        } catch (ActivityNotFoundException ex) {
-            startActivity(webIntent);
+        for (Trailers moviestrailer : moviesTrailers){
+            idOfVideos.add( moviestrailer.getmVideoKey());
         }
     }
+
 
     @Override
     public void onClick(View view) {
         switch(view.getId()){
 
             case R.id.tralors_1:
-                //watchYoutubeVideo(keyOfMovieTrailer.get(0));
+                playVideo(idOfVideos.get(0));
                 break;
 
             case R.id.tralors_2:
-                //watchYoutubeVideo(keyOfMovieTrailer.get(1));
+
+                if(idOfVideos.get(1) != null) {
+                    playVideo(idOfVideos.get(1));
+                }else{
+                    playVideo(idOfVideos.get(0));
+                }
                 break;
 
             case R.id.tralors_3:
-               // watchYoutubeVideo(keyOfMovieTrailer.get(2));
+
+                if(idOfVideos.get(2) != null) {
+                    playVideo(idOfVideos.get(2));
+                } else if(idOfVideos.get(1) != null){
+                    playVideo(idOfVideos.get(1));
+                } else{
+                    playVideo(idOfVideos.get(0));
+                }
                 break;
 
         }
+    }
+
+    public void playVideo(String key){
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
+
+        // Check if the youtube app exists on the device
+        if (intent.resolveActivity(getPackageManager()) == null) {
+            // If the youtube app doesn't exist, then use the browser
+            intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://www.youtube.com/watch?v=" + key));
+        }
+
+        startActivity(intent);
     }
 }
