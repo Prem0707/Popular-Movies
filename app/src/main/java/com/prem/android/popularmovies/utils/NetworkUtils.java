@@ -24,7 +24,7 @@ public class NetworkUtils {
     public static URL buildURL(String userSelectedCategory) {
 
         Uri buildUrl = Uri.parse(Constants.MOVIE_BASE_URL).buildUpon()
-                .appendPath(userSelectedCategory)
+                .appendEncodedPath(userSelectedCategory)
                 .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY)
                 .build();
 

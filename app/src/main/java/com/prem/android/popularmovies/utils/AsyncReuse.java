@@ -4,7 +4,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.prem.android.popularmovies.Interfaces.TaskCompleted;
-import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.Json_Parser.TrailerJsonParser;
+import com.prem.android.popularmovies.Models.Trailers;
 
 import org.json.JSONException;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 /**
  * Created by Prem on 19-08-2017.
  */
-public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Movies>> {
+public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Trailers>> {
     private Context mContext;
     private TaskCompleted mCallback;
 
@@ -26,10 +27,10 @@ public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Movies>> {
     }
 
     @Override
-    protected ArrayList<Movies> doInBackground(String... params) {
+    protected ArrayList<Trailers> doInBackground(String... params) {
 
         String sortOptionSelected = params[0];
-        URL urlForFetchMovieDetails = NetworkUtils.buildURL(sortOptionSelected);
+        URL urlForFetchMovieDetails = NetworkUtils.buildURL(sortOptionSelected +"/videos");
 
         if (urlForFetchMovieDetails != null) {
             try {
@@ -39,7 +40,7 @@ public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Movies>> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return TheMovieDbJsonUtils.getMovieListFromJson(responseFromAPI);
+                return TrailerJsonParser.getTrailersFeomJson(responseFromAPI);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -48,9 +49,9 @@ public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Movies>> {
     }
 
     @Override
-    protected void onPostExecute(ArrayList<Movies> movies) {
-        super.onPostExecute(movies);
+    protected void onPostExecute(ArrayList<Trailers> moviesTrailers) {
+        super.onPostExecute(moviesTrailers);
         //This is where you return data back to caller
-        mCallback.onTaskCompleted(movies);
+        mCallback.onTaskCompleted(moviesTrailers);
     }
 }

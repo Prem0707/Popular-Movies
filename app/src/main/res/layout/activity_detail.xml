@@ -74,6 +74,63 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/black" />
 
+                <TextView
+                    android:text="Trailers:"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_margin="20dp"/>
+            <Button
+                android:id="@+id/tralors_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Trailer 1"
+                />
+
+            <Button
+                android:id="@+id/tralors_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Trailer 2"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/tralors_3"
+                android:text="Trailer 3" />
+
+
+            <TextView
+                android:id="@+id/keys"
+                android:text="Keys:"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"/>
+
+            <TextView
+                android:text="Review:"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"/>
+
+            <TextView
+                android:id="@+id/review_of_movie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/synopsis_bottom_margin"
+                android:layout_marginLeft="@dimen/margin_left"
+                android:layout_marginRight="@dimen/margin_left"
+                android:layout_marginTop="@dimen/margin_left"
+                android:text="@string/medium_text"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/black"/>
+
 
         </LinearLayout>
 

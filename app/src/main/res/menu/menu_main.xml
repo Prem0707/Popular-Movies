@@ -4,14 +4,19 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/most_popular"
         android:orderInCategory="1"
-        android:title="Settings"
-        app:showAsAction="never" />
+        android:title="Sort By Popularity"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/most_rated"
+        android:orderInCategory="2"
+        android:title="Sort By Rating"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/about_the_app"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:title="About"
         app:showAsAction="never"/>
 </menu>

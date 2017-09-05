@@ -1,6 +1,6 @@
 package com.prem.android.popularmovies.Interfaces;
 
-import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.Models.Trailers;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,6 @@ import java.util.ArrayList;
 public interface TaskCompleted {
 
     // Define data you like to return from AysncTask
-     void onTaskCompleted(ArrayList<Movies> movies);
+     void onTaskCompleted(ArrayList<Trailers> moviesTrailers);
 
 }
