@@ -27,7 +27,6 @@ public class NetworkUtils {
                 .appendEncodedPath(userSelectedCategory)
                 .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY)
                 .build();
-
         return convertAndroidUrltoJavaUrl(buildUrl);
     }
 
@@ -43,7 +42,6 @@ public class NetworkUtils {
 
     /**
      * This method returns the entire result from the Http response
-     *
      * throws IOException related to network and stream reading
      * params url The URL to fetch the HTTP response from.
      * returns The contents of Http response

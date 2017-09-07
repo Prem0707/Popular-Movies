@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 public class DetailActivity extends AppCompatActivity implements
                        LoaderManager.LoaderCallbacks<ArrayList<Reviews>> ,TaskCompleted, View.OnClickListener{
 
@@ -49,7 +50,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     private static String ID_OF_MOVIE;
     private static final int MOVIE_REVIEW_LOADER = 10;
-    Button mTrailors_1, mTrailors_2, mTrailors_3;
+    Button mTrailers_1, mTrailers_2, mTrailers_3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +67,12 @@ public class DetailActivity extends AppCompatActivity implements
         Movies currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
 
         // Initialisation of buttons
-        mTrailors_1 = (Button) findViewById(R.id.tralors_1);
-        mTrailors_2 = (Button) findViewById(R.id.tralors_2);
-        mTrailors_3 = (Button) findViewById(R.id.tralors_3);
-        mTrailors_1.setOnClickListener(this);
-        mTrailors_2.setOnClickListener(this);
-        mTrailors_3.setOnClickListener(this);
+        mTrailers_1 = (Button) findViewById(R.id.tralors_1);
+        mTrailers_2 = (Button) findViewById(R.id.tralors_2);
+        mTrailers_3 = (Button) findViewById(R.id.tralors_3);
+        mTrailers_1.setOnClickListener(this);
+        mTrailers_2.setOnClickListener(this);
+        mTrailers_3.setOnClickListener(this);
 
         // Populating views
         mTextView.setText(currentMovie.getTitle());
@@ -81,8 +82,6 @@ public class DetailActivity extends AppCompatActivity implements
         mRating.setText(FormatUtils.getFormattedRating(currentMovie.getUserRating()));
         mOverview.setText(currentMovie.getOverview());
         this.mMovieId = Integer.toString(currentMovie.getmMovieId());
-
-
 
         // AsyncTask for Trailers
         AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
@@ -205,15 +204,12 @@ public class DetailActivity extends AppCompatActivity implements
 
     }
 
-
-
     @Override
     public void onTaskCompleted(ArrayList<Trailers> moviesTrailers) {
         for (Trailers moviestrailer : moviesTrailers){
             idOfVideos.add( moviestrailer.getmVideoKey());
         }
     }
-
 
     @Override
     public void onClick(View view) {
@@ -242,7 +238,6 @@ public class DetailActivity extends AppCompatActivity implements
                     playVideo(idOfVideos.get(0));
                 }
                 break;
-
         }
     }
 

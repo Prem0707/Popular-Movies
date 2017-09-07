@@ -19,25 +19,31 @@ public class TheMovieDbJsonUtils {
 
         ArrayList<Movies> movieList = new ArrayList<>();
 
-        JSONObject reader = new JSONObject(responseFromAPI);
-        JSONArray arrayOfMoviesObject = reader.getJSONArray(Constants.RESULTS);
 
-        //Parsing the objects of reader Array
 
-        for (int i = 0; i < arrayOfMoviesObject.length(); i++) {
+        if (responseFromAPI != null) {
 
-            Movies currentMovie = new Movies();
+            JSONObject reader = new JSONObject(responseFromAPI);
+            JSONArray arrayOfMoviesObject = reader.getJSONArray(Constants.RESULTS);
 
-            JSONObject objectOfReaderArray = arrayOfMoviesObject.getJSONObject(i);
 
-            currentMovie.setTitle(objectOfReaderArray.getString(Constants.TITLE_OF_MOVIE));
-            currentMovie.setPoster(objectOfReaderArray.getString(Constants.THUMBNAIL_OF_MOVIE));
-            currentMovie.setReleaseDate(objectOfReaderArray.getString(Constants.RELEASE_DATE));
-            currentMovie.setUserRating(objectOfReaderArray.getString(Constants.RATING_OF_MOVIE));
-            currentMovie.setOverview(objectOfReaderArray.getString(Constants.OVERVIEW_OF_MOVIE));
-            currentMovie.setIdMovie(objectOfReaderArray.getInt(Constants.ID_OF_MOVIE));
+            //Parsing the objects of reader Array
 
-            movieList.add(currentMovie);
+            for (int i = 0; i < arrayOfMoviesObject.length(); i++) {
+
+                Movies currentMovie = new Movies();
+
+                JSONObject objectOfReaderArray = arrayOfMoviesObject.getJSONObject(i);
+
+                currentMovie.setTitle(objectOfReaderArray.getString(Constants.TITLE_OF_MOVIE));
+                currentMovie.setPoster(objectOfReaderArray.getString(Constants.THUMBNAIL_OF_MOVIE));
+                currentMovie.setReleaseDate(objectOfReaderArray.getString(Constants.RELEASE_DATE));
+                currentMovie.setUserRating(objectOfReaderArray.getString(Constants.RATING_OF_MOVIE));
+                currentMovie.setOverview(objectOfReaderArray.getString(Constants.OVERVIEW_OF_MOVIE));
+                currentMovie.setIdMovie(objectOfReaderArray.getInt(Constants.ID_OF_MOVIE));
+
+                movieList.add(currentMovie);
+            }
         }
         return movieList;
     }

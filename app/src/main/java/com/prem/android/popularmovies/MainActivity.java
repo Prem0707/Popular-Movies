@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.prem.android.popularmovies.Adapters.MovieAdapter;
 import com.prem.android.popularmovies.Json_Parser.TheMovieDbJsonUtils;
 import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.SharedPref.UserPreference;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.Constants;
 import com.prem.android.popularmovies.utils.NetworkUtils;
@@ -40,7 +41,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
+
+        try{
+            String sharedPrefByUser = UserPreference.getSharedPref("SORT_ACCORDING_TO_USER_PREF",this);
+            fetchMoviesIfDeviceOnline(sharedPrefByUser);
+        } catch(NullPointerException e){
+            fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
+        }
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = gridLayoutManagerAccordingToOrientation();
@@ -78,11 +85,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.sort_by_pop) {
+        if (id == R.id.most_popular) {
+            UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF",Constants.POPULAR_MOVIES_SORT_SELECTION,this);
             fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
             return true;
         }
-        else if (id == R.id.sort_by_rate){
+        else if (id == R.id.most_rated){
+            UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF", Constants.TOP_RATED_MOVIES_SORT_SELECTION,this);
             fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
             return true;
         }
@@ -133,7 +142,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 } else{
                     forceLoad();
                 }
-
             }
 
             @Override
@@ -168,7 +176,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 super.deliverResult(data);
             }
         };
-
     }
 
     @Override
@@ -181,6 +188,5 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
     }
-
 
 }
