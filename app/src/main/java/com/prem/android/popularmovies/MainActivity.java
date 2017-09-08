@@ -1,8 +1,10 @@
 package com.prem.android.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -29,7 +31,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<ArrayList<Movies>>{
+        LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static MovieAdapter mMovieAdapter;
     private static GridLayoutManager mGridLayoutManager;
@@ -71,6 +73,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -87,12 +96,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //noinspection SimplifiableIfStatement
         if (id == R.id.most_popular) {
             UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF",Constants.POPULAR_MOVIES_SORT_SELECTION,this);
-            fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
             return true;
         }
         else if (id == R.id.most_rated){
             UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF", Constants.TOP_RATED_MOVIES_SORT_SELECTION,this);
-            fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -168,7 +175,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             /**
              * Sends the result of the load to the registered listener.
-             *
              * @param data The result of the load
              */
             public void deliverResult(ArrayList<Movies> data) {
@@ -182,11 +188,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> moviesList) {
         mMovieAdapter.setMovieList(moviesList);
         mGridLayoutManager.scrollToPositionWithOffset(0, 0);
-
     }
 
     @Override
     public void onLoaderReset(Loader<ArrayList<Movies>> loader) {
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        /** Cleanup the shared preference listener **/
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    //This is a listener that will update the UI when sorting criteria will change
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        String sharedPrefByUser = UserPreference.getSharedPref("SORT_ACCORDING_TO_USER_PREF",this);
+        fetchMoviesIfDeviceOnline(sharedPrefByUser);
+    }
 }

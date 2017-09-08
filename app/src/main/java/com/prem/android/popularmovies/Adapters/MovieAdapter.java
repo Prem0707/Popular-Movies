@@ -27,11 +27,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         this.mClickHandler = mHandler;
     }
 
-    public class MovieAdapterViewHolder extends RecyclerView.ViewHolder  {
+    class MovieAdapterViewHolder extends RecyclerView.ViewHolder  {
 
-        public final ImageView mMovieImageView;
+        final ImageView mMovieImageView;
 
-        public MovieAdapterViewHolder(View itemView) {
+        MovieAdapterViewHolder(View itemView) {
             super(itemView);
             mMovieImageView = (ImageView) itemView.findViewById(R.id.image_in_gridview);
 

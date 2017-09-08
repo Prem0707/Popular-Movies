@@ -22,5 +22,6 @@ public class MovieContract {
         public static final String MOVIE_DESCRIPTION = "description";
         public static final String MOVIE_RATING = "rating";
         public static final String MOVIE_RELEASE_DATE = "release_date";
+
     }
 }
