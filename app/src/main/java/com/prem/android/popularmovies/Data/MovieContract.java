@@ -1,5 +1,6 @@
 package com.prem.android.popularmovies.Data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,12 +9,29 @@ import android.provider.BaseColumns;
  */
 public class MovieContract {
 
+    // Content Authority
+    public static final String CONTENT_AUTHORITY = "";
+
+    /**
+     * The content authority is used to create the base of all URIs which apps will use to
+     *  contact this content provider.
+     */
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    /**
+     * A list of possible paths that will be appended to the base URI for each of the different
+     * tables.
+     */
+    public static final String TABLE_MOVIE_NAME = "movies";
+
+
     /* MovieEntry is an inner class that defines the contents of the Movie table */
 
     public static final class MovieEntry implements BaseColumns {
 
-        // Table name
-        public static final String TABLE_MOVIE_NAME = "movies";
+        // Content URI represents the base location for the table
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(TABLE_MOVIE_NAME).build();
 
         //Movie table contents
         public static final String MOVIE_ID = "id";
