@@ -33,11 +33,18 @@
                 android:value=".MainActivity" />
         </activity>
 
+        <activity android:name=".FavouriteActivity"
+            android:label= "Favourite Collections"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
         <provider
-            android:name=".Data.MovieProvider"
+            android:name="com.prem.android.popularmovies.Data.MovieProvider"
             android:authorities="com.prem.android.popularmovies"
-            android:exported="false"
-            />
+            android:exported="false" />
     </application>
 
 </manifest>

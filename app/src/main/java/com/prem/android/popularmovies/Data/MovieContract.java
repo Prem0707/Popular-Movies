@@ -1,5 +1,7 @@
 package com.prem.android.popularmovies.Data;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -33,6 +35,11 @@ public class MovieContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(TABLE_MOVIE_NAME).build();
 
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_MOVIE_NAME;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + TABLE_MOVIE_NAME;
+
         //Movie table contents
         public static final String MOVIE_ID = "id";
         public static final String MOVIE_POSTER_PATH = "poster_path";
@@ -41,5 +48,8 @@ public class MovieContract {
         public static final String MOVIE_RATING = "rating";
         public static final String MOVIE_RELEASE_DATE = "release_date";
 
+        public static Uri buildMovieUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
     }
 }

@@ -39,6 +39,7 @@ public class MovieProvider extends ContentProvider {
         matcher.addURI(contentAuthority, MovieContract.TABLE_MOVIE_NAME, MOVIE);
         matcher.addURI(contentAuthority, MovieContract.TABLE_MOVIE_NAME + "/#", MOVIE_ID);
 
+        // return the matcher
         return matcher;
     }
 
@@ -96,13 +97,45 @@ public class MovieProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            case MOVIE:
+                // directory
+                return MovieContract.MovieEntry.CONTENT_TYPE;
+
+            case MOVIE_ID:
+                // single item type
+                return MovieContract.MovieEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        return null;
+        final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
+        long _id;
+        Uri returnUri;
+        switch(sUriMatcher.match(uri)){
+            case MOVIE:
+                _id = db.insert(MovieContract.TABLE_MOVIE_NAME, null, contentValues);
+                if(_id > 0){
+                    returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
+                } else{
+                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                }
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+
+        // Use this on the URI passed into the function to notify any observers that the uri has
+        // changed.
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override
@@ -140,7 +173,7 @@ public class MovieProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
-
+        // notify the listener here
         if(rows != 0){
             getContext().getContentResolver().notifyChange(uri, null);
         }

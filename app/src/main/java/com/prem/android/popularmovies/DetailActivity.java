@@ -1,5 +1,6 @@
 package com.prem.android.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.prem.android.popularmovies.Data.MovieContract;
 import com.prem.android.popularmovies.Interfaces.TaskCompleted;
 import com.prem.android.popularmovies.Json_Parser.ReviewsParser;
 import com.prem.android.popularmovies.Models.Movies;
@@ -36,21 +41,24 @@ import butterknife.ButterKnife;
 
 
 public class DetailActivity extends AppCompatActivity implements
-                       LoaderManager.LoaderCallbacks<ArrayList<Reviews>> ,TaskCompleted, View.OnClickListener{
+                       LoaderManager.LoaderCallbacks<ArrayList<Reviews>> ,TaskCompleted,
+        View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     String mMovieId;
     ArrayList<String> idOfVideos = new ArrayList<>();
 
-    @BindView( R.id.movie_title) TextView mTextView;
+    @BindView(R.id.movie_title) TextView mTextView;
     @BindView(R.id.release_date) TextView mReleaseDate;
     @BindView(R.id.movie_poster) ImageView mPosterImage;
     @BindView(R.id.overview_of_movie) TextView mOverview;
     @BindView(R.id.rating) TextView mRating;
     @BindView(R.id.review_of_movie) TextView mReviewMovies;
+    @BindView(R.id.favourite_button) ToggleButton mToggleButton;
 
     private static String ID_OF_MOVIE;
     private static final int MOVIE_REVIEW_LOADER = 10;
     Button mTrailers_1, mTrailers_2, mTrailers_3;
+    Movies currentMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,7 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         Intent intentThatStartedActivity = getIntent();
-        Movies currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
+        this.currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
 
         // Initialisation of buttons
         mTrailers_1 = (Button) findViewById(R.id.tralors_1);
@@ -73,6 +81,8 @@ public class DetailActivity extends AppCompatActivity implements
         mTrailers_1.setOnClickListener(this);
         mTrailers_2.setOnClickListener(this);
         mTrailers_3.setOnClickListener(this);
+        mToggleButton.setChecked(false); // set the current state of a toggle button
+        mToggleButton.setOnCheckedChangeListener(this);
 
         // Populating views
         mTextView.setText(currentMovie.getTitle());
@@ -99,7 +109,6 @@ public class DetailActivity extends AppCompatActivity implements
         } else {
             loaderManager.restartLoader(MOVIE_REVIEW_LOADER, reviewBundle,this);
         }
-
     }
 
     @Override
@@ -253,5 +262,32 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChacked) {
+
+
+        if(!isChacked){
+
+            Toast.makeText(this, "Here is favourite is false", Toast.LENGTH_LONG).show();
+           /* int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
+                   ,null,null);*/
+        } else{
+
+             ContentValues contentValues = new ContentValues();
+             contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
+             contentValues.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, currentMovie.getPoster());
+             contentValues.put(MovieContract.MovieEntry.MOVIE_TITLE, currentMovie.getTitle());
+             contentValues.put(MovieContract.MovieEntry.MOVIE_DESCRIPTION, currentMovie.getTitle());
+             contentValues.put(MovieContract.MovieEntry.MOVIE_RATING, currentMovie.getUserRating());
+             contentValues.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
+
+            // Insert the content values via a ContentResolver
+             Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+
+            //  Don't forget to call finish() to return to MainActivity after this insert is complete
+            Toast.makeText(getApplicationContext(),uri.toString() , Toast.LENGTH_LONG).show();
+        }
     }
 }

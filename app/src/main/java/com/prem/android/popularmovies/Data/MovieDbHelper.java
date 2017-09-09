@@ -32,7 +32,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 MovieContract.MovieEntry.MOVIE_POSTER_PATH   +     "TEXT NOT NULL," +
                 MovieContract.MovieEntry.MOVIE_DESCRIPTION   +     "TEXT NOT NULL," +
                 MovieContract.MovieEntry.MOVIE_TITLE         +     "TEXT NOT NULL," +
-                MovieContract.MovieEntry.MOVIE_RATING        +      "TEXT NOT NUL,L" +
+                MovieContract.MovieEntry.MOVIE_RATING        +      "TEXT NOT NULL," +
                 MovieContract.MovieEntry.MOVIE_RELEASE_DATE  +      "TEXT NOT NULL," + ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_TABLE);

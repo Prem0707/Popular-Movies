@@ -2,7 +2,6 @@ package com.prem.android.popularmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
@@ -34,9 +33,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static MovieAdapter mMovieAdapter;
-    private static GridLayoutManager mGridLayoutManager;
+    public static GridLayoutManager mGridLayoutManager;
     private static final String POPULAR_MOVIES_LOADER = "22";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mGridLayoutManager = gridLayoutManagerAccordingToOrientation();
+        mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
 
         if (mRecyclerView != null) {
             mRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -62,15 +60,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-    private GridLayoutManager gridLayoutManagerAccordingToOrientation() {
-        int deviceOrientation = CheckOrientation.checkDeviceOrientation(this);
-
-        if (deviceOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            return new GridLayoutManager(this,2);
-        } else
-            return new GridLayoutManager(this,3);
-
-    }
 
     @Override
     protected void onResume(){
@@ -97,9 +86,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (id == R.id.most_popular) {
             UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF",Constants.POPULAR_MOVIES_SORT_SELECTION,this);
             return true;
-        }
-        else if (id == R.id.most_rated){
+        } else if (id == R.id.most_rated){
             UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF", Constants.TOP_RATED_MOVIES_SORT_SELECTION,this);
+            return true;
+        } else if (id == R.id.favourite_movies){
+           Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
+            startActivity(favouriteMovie);
             return true;
         }
         return super.onOptionsItemSelected(item);
