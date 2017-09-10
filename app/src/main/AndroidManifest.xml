@@ -44,7 +44,8 @@
         <provider
             android:name="com.prem.android.popularmovies.Data.MovieProvider"
             android:authorities="com.prem.android.popularmovies"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="InnerclassSeparator" />
     </application>
 
 </manifest>

@@ -43,25 +43,35 @@ import butterknife.ButterKnife;
 import static com.prem.android.popularmovies.Data.MovieContract.MovieEntry.CONTENT_URI;
 
 
+
 public class DetailActivity extends AppCompatActivity implements
-                       LoaderManager.LoaderCallbacks<ArrayList<Reviews>> ,TaskCompleted,
-        View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+        LoaderManager.LoaderCallbacks<ArrayList<Reviews>>, TaskCompleted,
+        View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
-    String mMovieId;
-    ArrayList<String> idOfVideos = new ArrayList<>();
+    private String mMovieId;
+    private ArrayList<String> idOfVideos = new ArrayList<>();
 
-    @BindView(R.id.movie_title) TextView mTextView;
-    @BindView(R.id.release_date) TextView mReleaseDate;
-    @BindView(R.id.movie_poster) ImageView mPosterImage;
-    @BindView(R.id.overview_of_movie) TextView mOverview;
-    @BindView(R.id.rating) TextView mRating;
-    @BindView(R.id.review_of_movie) TextView mReviewMovies;
-    @BindView(R.id.favourite_button) ToggleButton mToggleButton;
+    @BindView(R.id.movie_title)
+    private TextView mTextView;
+    @BindView(R.id.release_date)
+    private TextView mReleaseDate;
+    @BindView(R.id.movie_poster)
+    private ImageView mPosterImage;
+    @BindView(R.id.overview_of_movie)
+    private TextView mOverview;
+    @BindView(R.id.rating)
+    private TextView mRating;
+    @BindView(R.id.review_of_movie)
+    private TextView mReviewMovies;
+    @BindView(R.id.favourite_button)
+    private ToggleButton mToggleButton;
 
     private static String ID_OF_MOVIE;
     private static final int MOVIE_REVIEW_LOADER = 10;
-    Button mTrailers_1, mTrailers_2, mTrailers_3;
-    Movies currentMovie;
+    private Button mTrailers_1;
+    private Button mTrailers_2;
+    private Button mTrailers_3;
+    private Movies currentMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +80,7 @@ public class DetailActivity extends AppCompatActivity implements
         ButterKnife.bind(this);
         android.support.v7.app.ActionBar actionBar = this.getSupportActionBar();
 
-        if(actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -78,9 +88,9 @@ public class DetailActivity extends AppCompatActivity implements
         this.currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
 
         // Initialisation of buttons
-        mTrailers_1 = (Button) findViewById(R.id.tralors_1);
-        mTrailers_2 = (Button) findViewById(R.id.tralors_2);
-        mTrailers_3 = (Button) findViewById(R.id.tralors_3);
+        mTrailers_1 = (Button) findViewById(R.id.trailer_1);
+        mTrailers_2 = (Button) findViewById(R.id.trailer_2);
+        mTrailers_3 = (Button) findViewById(R.id.trailer_1);
         mTrailers_1.setOnClickListener(this);
         mTrailers_2.setOnClickListener(this);
         mTrailers_3.setOnClickListener(this);
@@ -89,15 +99,15 @@ public class DetailActivity extends AppCompatActivity implements
         // Populating views
         mTextView.setText(currentMovie.getTitle());
         String picassoUrl = NetworkUtils.buildPicassoUrl(currentMovie.getPoster());
-        Picasso.with(this).load(picassoUrl).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(mPosterImage);
+        Picasso.with(this).load(picassoUrl).into(mPosterImage);
         mReleaseDate.setText(currentMovie.getReleaseDate());
         mRating.setText(FormatUtils.getFormattedRating(currentMovie.getUserRating()));
         mOverview.setText(currentMovie.getOverview());
         this.mMovieId = Integer.toString(currentMovie.getmMovieId());
 
-            // AsyncTask for Trailers
-            AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
-            asyncReuse.execute(mMovieId);
+        // AsyncTask for Trailers
+        AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
+        asyncReuse.execute(mMovieId);
 
 
         // Loader for Reviews
@@ -107,20 +117,21 @@ public class DetailActivity extends AppCompatActivity implements
         LoaderManager loaderManager = getSupportLoaderManager();
         Loader<Reviews> moviesReviewsLoader = loaderManager.getLoader(MOVIE_REVIEW_LOADER);
 
-        if(moviesReviewsLoader == null){
-            loaderManager.initLoader(MOVIE_REVIEW_LOADER, reviewBundle,this);
+        if (moviesReviewsLoader == null) {
+            loaderManager.initLoader(MOVIE_REVIEW_LOADER, reviewBundle, this);
         } else {
-            loaderManager.restartLoader(MOVIE_REVIEW_LOADER, reviewBundle,this);
+            loaderManager.restartLoader(MOVIE_REVIEW_LOADER, reviewBundle, this);
         }
         SharedPreferences shared = getSharedPreferences("FAVORITE", MODE_PRIVATE);
         boolean state = shared.contains(String.valueOf(currentMovie.getmMovieId()));
         mToggleButton.setChecked(state);
     }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem menu){
+    public boolean onOptionsItemSelected(MenuItem menu) {
         int id = menu.getItemId();
 
-        if(id == android.R.id.home){
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
         return super.onOptionsItemSelected(menu);
@@ -144,9 +155,9 @@ public class DetailActivity extends AppCompatActivity implements
             protected void onStartLoading() {
                 super.onStartLoading();
 
-                if(mReviews != null){
+                if (mReviews != null) {
                     deliverResult(mReviews);
-                } else{
+                } else {
                     forceLoad();
                 }
             }
@@ -158,18 +169,18 @@ public class DetailActivity extends AppCompatActivity implements
                 if (idOfMovie == null) {
                     return null;
                 }
-                URL urlForFetchMovieDetails = NetworkUtils.buildURL(idOfMovie+"/reviews");
+                URL urlForFetchMovieDetails = NetworkUtils.buildURL(idOfMovie + "/reviews");
 
                 if (urlForFetchMovieDetails != null) {
                     try {
                         String responseFromAPI = null;
                         try {
-                             responseFromAPI = NetworkUtils.getResponseFromHttpUrl(urlForFetchMovieDetails);
+                            responseFromAPI = NetworkUtils.getResponseFromHttpUrl(urlForFetchMovieDetails);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
 
-                        return ReviewsParser.getReviewsFeomJson(responseFromAPI);
+                        return ReviewsParser.getReviewsFromJson(responseFromAPI);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -196,12 +207,12 @@ public class DetailActivity extends AppCompatActivity implements
      */
     @Override
     public void onLoadFinished(Loader<ArrayList<Reviews>> loader, ArrayList<Reviews> data) {
-        String stringReviews= null;
-        for (Reviews reviews: data){
+        String stringReviews = null;
+        for (Reviews reviews : data) {
 
-                stringReviews = stringReviews + reviews.getAuthor()+"\n" + reviews.getContent()+"\n";
+            stringReviews = stringReviews + reviews.getAuthor() + "\n" + reviews.getContent() + "\n";
         }
-        if(stringReviews != null) {
+        if (stringReviews != null) {
             mReviewMovies.setText(stringReviews);
         }
     }
@@ -220,42 +231,42 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public void onTaskCompleted(ArrayList<Trailers> moviesTrailers) {
-        for (Trailers moviestrailer : moviesTrailers){
-            idOfVideos.add( moviestrailer.getmVideoKey());
+        for (Trailers moviestrailer : moviesTrailers) {
+            idOfVideos.add(moviestrailer.getmVideoKey());
         }
     }
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
 
-            case R.id.tralors_1:
+            case R.id.trailer_1:
                 playVideo(idOfVideos.get(0));
                 break;
 
-            case R.id.tralors_2:
+            case R.id.trailer_2:
 
-                if(idOfVideos.get(1) != null) {
+                if (idOfVideos.get(1) != null) {
                     playVideo(idOfVideos.get(1));
-                }else{
+                } else {
                     playVideo(idOfVideos.get(0));
                 }
                 break;
 
-            case R.id.tralors_3:
+            case R.id.trailer_3:
 
-                if(idOfVideos.get(2) != null) {
+                if (idOfVideos.get(2) != null) {
                     playVideo(idOfVideos.get(2));
-                } else if(idOfVideos.get(1) != null){
+                } else if (idOfVideos.get(1) != null) {
                     playVideo(idOfVideos.get(1));
-                } else{
+                } else {
                     playVideo(idOfVideos.get(0));
                 }
                 break;
         }
     }
 
-    public void playVideo(String key){
+    private void playVideo(String key) {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + key));
 
@@ -270,15 +281,15 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChacked) {
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
 
         boolean state = compoundButton.isChecked();
-        Long favMovieId =Long.parseLong(String.valueOf(currentMovie.getmMovieId()));
+        Long favMovieId = Long.parseLong(String.valueOf(currentMovie.getmMovieId()));
 
-        if(state){
-            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+        if (state) {
+            SharedPreferences favorite = getSharedPreferences("FAVORITE", MODE_PRIVATE);
             SharedPreferences.Editor editor = favorite.edit();
-            editor.putLong(favMovieId.toString(),favMovieId);
+            editor.putLong(favMovieId.toString(), favMovieId);
             editor.commit();
 
             ContentValues contentValues = new ContentValues();
@@ -293,18 +304,18 @@ public class DetailActivity extends AppCompatActivity implements
             Uri uri = getContentResolver().insert(CONTENT_URI, contentValues);
 
             //  Don't forget to call finish() to return to MainActivity after this insert is complete
-            Toast.makeText(getApplicationContext(),uri.toString() , Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), uri != null ? uri.toString() : null, Toast.LENGTH_LONG).show();
 
 
-        } else{
+        } else {
 
-            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+            SharedPreferences favorite = getSharedPreferences("FAVORITE", MODE_PRIVATE);
             SharedPreferences.Editor editor = favorite.edit();
             editor.remove(favMovieId.toString());
             editor.commit();
             Toast.makeText(this, "Here is favourite is false", Toast.LENGTH_LONG).show();
-           /* int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
-                   ,null,null);*/
+            int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
+                    , null, null);
         }
     }
 }

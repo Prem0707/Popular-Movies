@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class TrailerJsonParser {
 
-    public static ArrayList<Trailers> getTrailersFeomJson (String responseFromAPI) throws JSONException {
+    public static ArrayList<Trailers> getTrailersFromJson(String responseFromAPI) throws JSONException {
 
         ArrayList<Trailers> trailersMovies = new ArrayList<>();
 

@@ -57,7 +57,7 @@ public class MovieProvider extends ContentProvider {
         final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
         Cursor retCursor;
 
-        switch(sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case MOVIE:
                 retCursor = db.query(
                         MovieContract.TABLE_MOVIE_NAME,
@@ -90,7 +90,11 @@ public class MovieProvider extends ContentProvider {
         // causes the cursor to register a content observer to watch for changes that happen to
         // this URI and any of it's descendants. By descendants, we mean any URI that begins
         // with this path.
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        try {
+            retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return retCursor;
     }
 
@@ -118,12 +122,12 @@ public class MovieProvider extends ContentProvider {
         final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
         long _id;
         Uri returnUri;
-        switch(sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case MOVIE:
                 _id = db.insert(MovieContract.TABLE_MOVIE_NAME, null, contentValues);
-                if(_id > 0){
+                if (_id > 0) {
                     returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
-                } else{
+                } else {
                     throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
                 }
                 break;
@@ -134,7 +138,11 @@ public class MovieProvider extends ContentProvider {
 
         // Use this on the URI passed into the function to notify any observers that the uri has
         // changed.
-        getContext().getContentResolver().notifyChange(uri, null);
+        try {
+            getContext().getContentResolver().notifyChange(uri, null);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         return returnUri;
     }
 
@@ -143,7 +151,7 @@ public class MovieProvider extends ContentProvider {
         final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
         int rows; // Number of rows effected
 
-        switch(sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
 
             case MOVIE:
                 rows = db.delete(MovieContract.TABLE_MOVIE_NAME, s, strings);
@@ -153,8 +161,12 @@ public class MovieProvider extends ContentProvider {
         }
 
         // Because null could delete all rows:
-        if(s == null || rows != 0){
-            getContext().getContentResolver().notifyChange(uri, null);
+        if (s == null || rows != 0) {
+            try {
+                getContext().getContentResolver().notifyChange(uri, null);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         return rows;
@@ -166,7 +178,7 @@ public class MovieProvider extends ContentProvider {
         final SQLiteDatabase db = movieDbHelper.getWritableDatabase();
         int rows;
 
-        switch(sUriMatcher.match(uri)){
+        switch (sUriMatcher.match(uri)) {
             case MOVIE:
                 rows = db.update(MovieContract.TABLE_MOVIE_NAME, contentValues, s, strings);
                 break;
@@ -174,8 +186,12 @@ public class MovieProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
         // notify the listener here
-        if(rows != 0){
-            getContext().getContentResolver().notifyChange(uri, null);
+        if (rows != 0) {
+            try {
+                getContext().getContentResolver().notifyChange(uri, null);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         return rows;

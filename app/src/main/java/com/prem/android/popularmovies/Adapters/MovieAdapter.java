@@ -23,11 +23,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
     private ArrayList<Movies> mMovieList;
     private final MovieAdapterOnClickHandler mClickHandler;
 
-    public MovieAdapter( MovieAdapterOnClickHandler mHandler){
+    public MovieAdapter(MovieAdapterOnClickHandler mHandler) {
         this.mClickHandler = mHandler;
     }
 
-    class MovieAdapterViewHolder extends RecyclerView.ViewHolder  {
+    class MovieAdapterViewHolder extends RecyclerView.ViewHolder {
 
         final ImageView mMovieImageView;
 
@@ -42,7 +42,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
                 }
             });
         }
-        
+
     }
 
     public interface MovieAdapterOnClickHandler {

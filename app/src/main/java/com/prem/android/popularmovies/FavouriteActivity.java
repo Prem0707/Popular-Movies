@@ -26,8 +26,6 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
 
     // Member variables for the adapter and RecyclerView
     private CustomCursorAdapter mAdapter;
-    RecyclerView mRecyclerView;
-    public static GridLayoutManager mGridLayoutManager;
 
 
     @Override
@@ -41,8 +39,8 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        GridLayoutManager mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
 
 
         // Set the layout for the RecyclerView to be a linear layout, which measures and

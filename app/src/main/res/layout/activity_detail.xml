@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress XmlUnusedNamespaceDeclaration -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="1"
     tools:context=".DetailActivity">
@@ -30,13 +31,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/movie_poster"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp300_margin"
-                    android:layout_marginBottom="@dimen/dp5_margin"
-                    android:layout_marginTop="@dimen/margin_left"
-                    android:contentDescription="@string/con_des" />
+            <ImageView
+                android:id="@+id/movie_poster"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp300_margin"
+                android:layout_marginBottom="@dimen/dp5_margin"
+                android:layout_marginTop="@dimen/margin_left"
+                android:contentDescription="@string/con_des" />
 
             <TextView
                 android:id="@+id/release_date"
@@ -80,47 +81,45 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:textOff="Mark As Favourite"
-                android:textOn="Favourite"
-                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
                 android:textColor="#f00"
-                android:layout_gravity="center_horizontal"/>
+                android:textOff="@string/mark_as_favourite"
+                android:textOn="@string/favourite" />
 
-                <TextView
-                    android:text="Trailers:"
-                    android:textStyle="bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:layout_margin="20dp"/>
-            <Button
-                android:id="@+id/tralors_1"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Trailer 1"
-                />
+                android:layout_margin="20dp"
+                android:text="@string/trailers"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <Button
-                android:id="@+id/tralors_2"
+                android:id="@+id/trailer_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Trailer 2"
-                />
+                android:text="@string/trailer_1" />
 
             <Button
+                android:id="@+id/trailer_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tralors_3"
-                android:text="Trailer 3" />
+                android:text="@string/trailer_2" />
+
+            <Button
+                android:id="@+id/trailer_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/trailer_3" />
 
 
             <TextView
-                android:text="Review:"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"/>
+                android:layout_margin="20dp"
+                android:text="@string/review"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/review_of_movie"
@@ -132,7 +131,7 @@
                 android:layout_marginTop="@dimen/margin_left"
                 android:text="@string/medium_text"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black" />
 
         </LinearLayout>
 

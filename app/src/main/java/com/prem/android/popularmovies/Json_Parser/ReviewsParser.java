@@ -14,28 +14,27 @@ import java.util.ArrayList;
  */
 public class ReviewsParser {
 
-    public static ArrayList<Reviews> getReviewsFeomJson (String responseFromAPI) throws JSONException {
+    public static ArrayList<Reviews> getReviewsFromJson(String responseFromAPI) throws JSONException {
 
         ArrayList<Reviews> reviews = new ArrayList<>();
 
         JSONObject reader = new JSONObject(responseFromAPI);
 
 
-            JSONArray arrayOfMoviesReview = reader.getJSONArray("results");
+        JSONArray arrayOfMoviesReview = reader.getJSONArray("results");
 
-            //Parsing the objects of reader Array
+        //Parsing the objects of reader Array
 
-            for (int i = 0; i < arrayOfMoviesReview.length(); i++) {
-                Reviews review = new Reviews();
+        for (int i = 0; i < arrayOfMoviesReview.length(); i++) {
+            Reviews review = new Reviews();
 
-                JSONObject objectOfResultArray = arrayOfMoviesReview.getJSONObject(i);
+            JSONObject objectOfResultArray = arrayOfMoviesReview.getJSONObject(i);
 
-                review.setAuthor(objectOfResultArray.getString("author"));
-                review.setContent(objectOfResultArray.getString("content"));
+            review.setAuthor(objectOfResultArray.getString("author"));
+            review.setContent(objectOfResultArray.getString("content"));
 
-
-                reviews.add(review);
-            }
+            reviews.add(review);
+        }
         return reviews;
     }
 }

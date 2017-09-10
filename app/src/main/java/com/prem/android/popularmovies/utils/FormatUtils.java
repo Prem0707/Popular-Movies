@@ -6,7 +6,7 @@ package com.prem.android.popularmovies.utils;
  */
 public class FormatUtils {
 
-    public static  String getFormattedRating(String rating){
+    public static String getFormattedRating(String rating) {
         return rating + "/" + "10";
     }
 

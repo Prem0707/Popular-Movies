@@ -1,15 +1,22 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="most_popular">Most Popular</string>
-    <string name="top_rated">Top Rated</string>
     <string name="desc">movies_poster</string>
     <string name="medium_text">Medium Text</string>
     <string name="large_text">Large Text</string>
     <string name="con_des">null</string>
 
     <!-- Strings Used by Preferences-->
-    <string name="pref_sort_by_rating" translatable="false">sort_by_rating</string>
-    <string name="pref_sort_by_popularity" translatable="false">sort_by_popularity</string>
-    <string name="title_activity_fab">Fab</string>
+
+    <string name="mark_as_favourite">Mark As Favourite</string>
+    <string name="favourite">Favourite</string>
+    <string name="trailers">Trailers:</string>
+    <string name="trailer_1">Trailer 1</string>
+    <string name="trailer_2">Trailer 2</string>
+    <string name="trailer_3">Trailer 3</string>
+    <string name="sort_by_rating">Sort By Rating</string>
+    <string name="favourites">Favourites</string>
+    <string name="about">About</string>
+    <string name="review">Review:</string>
+    <string name="sort_by_popularity">Sort By Popularity</string>
 
 </resources>

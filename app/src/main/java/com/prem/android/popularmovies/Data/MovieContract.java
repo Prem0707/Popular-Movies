@@ -16,7 +16,7 @@ public class MovieContract {
 
     /**
      * The content authority is used to create the base of all URIs which apps will use to
-     *  contact this content provider.
+     * contact this content provider.
      */
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconDipSize">
+        <ignore path="src/main/res/mipmap-hdpi/placeholder.png" />
+        <ignore path="src/main/res/mipmap-mdpi/placeholder.png" />
+        <ignore path="src/main/res/mipmap-xhdpi/placeholder.png" />
+        <ignore path="src/main/res/mipmap-xxhdpi/placeholder.png" />
+        <ignore path="src/main/res/mipmap-xxxhdpi/placeholder.png" />
+    </issue>
+</lint>

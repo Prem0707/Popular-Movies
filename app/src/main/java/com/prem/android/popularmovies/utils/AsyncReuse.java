@@ -17,8 +17,9 @@ import java.util.ArrayList;
  * Created by Prem on 19-08-2017.
  */
 public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Trailers>> {
-    private Context mContext;
-    private TaskCompleted mCallback;
+
+    private final Context mContext;
+    private final TaskCompleted mCallback;
 
     public AsyncReuse(Context context) {
         this.mContext = context;
@@ -30,7 +31,7 @@ public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Trailers>> {
     protected ArrayList<Trailers> doInBackground(String... params) {
 
         String sortOptionSelected = params[0];
-        URL urlForFetchMovieDetails = NetworkUtils.buildURL(sortOptionSelected +"/videos");
+        URL urlForFetchMovieDetails = NetworkUtils.buildURL(sortOptionSelected + "/videos");
 
         if (urlForFetchMovieDetails != null) {
             try {
@@ -40,7 +41,7 @@ public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Trailers>> {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return TrailerJsonParser.getTrailersFeomJson(responseFromAPI);
+                return TrailerJsonParser.getTrailersFromJson(responseFromAPI);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

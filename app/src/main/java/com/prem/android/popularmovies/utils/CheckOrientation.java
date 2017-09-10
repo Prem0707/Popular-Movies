@@ -10,19 +10,18 @@ import android.support.v7.widget.GridLayoutManager;
  */
 public class CheckOrientation {
 
-    public static int checkDeviceOrientation(Context context){
+    private static int checkDeviceOrientation(Context context) {
         return context.getResources().getConfiguration().orientation;
     }
-
 
 
     public static GridLayoutManager gridLayoutManagerAccordingToOrientation(Context context) {
         int deviceOrientation = CheckOrientation.checkDeviceOrientation(context);
 
         if (deviceOrientation == Configuration.ORIENTATION_PORTRAIT) {
-            return new GridLayoutManager(context,2);
+            return new GridLayoutManager(context, 2);
         } else
-            return new GridLayoutManager(context,3);
+            return new GridLayoutManager(context, 3);
 
     }
 }

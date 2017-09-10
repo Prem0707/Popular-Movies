@@ -32,13 +32,12 @@ import java.util.ArrayList;
 public class
 
 MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener{
+        LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static MovieAdapter mMovieAdapter;
-    public static GridLayoutManager mGridLayoutManager;
+    private static GridLayoutManager mGridLayoutManager;
     private static final String POPULAR_MOVIES_LOADER = "22";
-    ArrayList<Movies> mMovieData;
-    ArrayList<Movies> moviesList;
+    private ArrayList<Movies> moviesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +46,10 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        try{
-            String sharedPrefByUser = UserPreference.getSharedPref("SORT_ACCORDING_TO_USER_PREF",this);
+        try {
+            String sharedPrefByUser = UserPreference.getSharedPref(this);
             fetchMoviesIfDeviceOnline(sharedPrefByUser);
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
         }
 
@@ -67,14 +66,14 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
 
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle bundleOutState){
+    protected void onSaveInstanceState(Bundle bundleOutState) {
         bundleOutState.putParcelableArrayList("mMovieData", moviesList);
         super.onSaveInstanceState(bundleOutState);
 
@@ -96,13 +95,13 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.most_popular) {
-            UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF",Constants.POPULAR_MOVIES_SORT_SELECTION,this);
+            UserPreference.setSharedPref(Constants.POPULAR_MOVIES_SORT_SELECTION, this);
             return true;
-        } else if (id == R.id.most_rated){
-            UserPreference.setSharedPref("SORT_ACCORDING_TO_USER_PREF", Constants.TOP_RATED_MOVIES_SORT_SELECTION,this);
+        } else if (id == R.id.most_rated) {
+            UserPreference.setSharedPref(Constants.TOP_RATED_MOVIES_SORT_SELECTION, this);
             return true;
-        } else if (id == R.id.favourite_movies){
-           Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
+        } else if (id == R.id.favourite_movies) {
+            Intent favouriteMovie = new Intent(this, FavouriteActivity.class);
             startActivity(favouriteMovie);
             return true;
         }
@@ -110,28 +109,28 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
     }
 
     // we will only execute the FetchMoviesTask if device online.
-    private void fetchMoviesIfDeviceOnline(String urlEndpoint){
+    private void fetchMoviesIfDeviceOnline(String urlEndpoint) {
         if (NetworkUtils.checkDeviceOnline(this)) {
 
             Bundle queryBundle = new Bundle();
-            queryBundle.putString(String.valueOf(POPULAR_MOVIES_LOADER),urlEndpoint);
+            queryBundle.putString(String.valueOf(POPULAR_MOVIES_LOADER), urlEndpoint);
             LoaderManager loaderManager = getSupportLoaderManager();
             Loader<ArrayList<Movies>> popMoviesLoader = loaderManager.getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
 
-            if(popMoviesLoader == null){
-                loaderManager.initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle,this);
+            if (popMoviesLoader == null) {
+                loaderManager.initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
             } else {
                 loaderManager.restartLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
             }
-        } else{
+        } else {
             Toast.makeText(this, "Check network connection", Toast.LENGTH_LONG).show();
-          }
+        }
     }
 
     @Override
     public void onMovieClick(Movies currentMovie) {
-        Toast.makeText(this, currentMovie.getTitle(),Toast.LENGTH_LONG).show();
-        Intent goesToDetailActivity = new Intent(this,DetailActivity.class);
+        Toast.makeText(this, currentMovie.getTitle(), Toast.LENGTH_LONG).show();
+        Intent goesToDetailActivity = new Intent(this, DetailActivity.class);
         goesToDetailActivity.putExtra(Constants.CURRENT_MOVIE_DATA, currentMovie);
         startActivity(goesToDetailActivity);
     }
@@ -150,7 +149,7 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
                 super.onStartLoading();
                 if (mMoviesData != null) {
                     deliverResult(mMoviesData);
-                } else{
+                } else {
                     forceLoad();
                 }
             }
@@ -202,7 +201,7 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /** Cleanup the shared preference listener **/
+        //Cleanup the shared preference listener
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
     }
@@ -210,7 +209,7 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
     //This is a listener that will update the UI when sorting criteria will change
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        String sharedPrefByUser = UserPreference.getSharedPref("SORT_ACCORDING_TO_USER_PREF",this);
+        String sharedPrefByUser = UserPreference.getSharedPref(this);
         fetchMoviesIfDeviceOnline(sharedPrefByUser);
     }
 }

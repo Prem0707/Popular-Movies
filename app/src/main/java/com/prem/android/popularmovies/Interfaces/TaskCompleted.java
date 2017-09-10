@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public interface TaskCompleted {
 
-    // Define data you like to return from AysncTask
-     void onTaskCompleted(ArrayList<Trailers> moviesTrailers);
+    // Define data you like to return from AsyncTask
+    void onTaskCompleted(ArrayList<Trailers> moviesTrailers);
 
 }

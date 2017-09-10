@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by Prem on 18-07-2017.
  *
  */
-public class Movies implements Parcelable{
+public class Movies implements Parcelable {
 
     private String mTitle;
     private String mPoster;
@@ -78,7 +78,7 @@ public class Movies implements Parcelable{
         this.mUserRating = mUserRating;
     }
 
-    public void setIdMovie(int mMovieId){
+    public void setIdMovie(int mMovieId) {
         this.mMovieId = mMovieId;
     }
 
@@ -102,7 +102,7 @@ public class Movies implements Parcelable{
         return mUserRating;
     }
 
-    public int getmMovieId(){
+    public int getmMovieId() {
         return mMovieId;
     }
 

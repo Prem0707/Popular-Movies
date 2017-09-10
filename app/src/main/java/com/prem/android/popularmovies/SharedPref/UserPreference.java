@@ -9,15 +9,15 @@ import android.preference.PreferenceManager;
  */
 public class UserPreference {
 
-    public static void setSharedPref(String key, String value, Context context) {
+    public static void setSharedPref(String value, Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(key, value);
+        editor.putString("SORT_ACCORDING_TO_USER_PREF", value);
         editor.apply();
     }
 
-    public static String getSharedPref(String key, Context context) {
+    public static String getSharedPref(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(key, null);
+        return preferences.getString("SORT_ACCORDING_TO_USER_PREF", null);
     }
 }

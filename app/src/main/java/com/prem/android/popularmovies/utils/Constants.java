@@ -17,7 +17,7 @@ public class Constants {
 
     public static final String CURRENT_MOVIE_DATA = "current_movie_data";
 
-     //Constants used in class NetworkUtils
+    //Constants used in class NetworkUtils
     //Key - Add your API Key here
     public static final String API_KEY = "89cf5fe65a50f63e8186c52216610f37";
 
@@ -27,12 +27,10 @@ public class Constants {
 
     //Methods we want to use
     public static final String POPULAR_MOVIES_SORT_SELECTION = "popular";
-    public static final String TOP_RATED_MOVIES_SORT_SELECTION= "top_rated";
+    public static final String TOP_RATED_MOVIES_SORT_SELECTION = "top_rated";
 
     //Query paths
     public static final String API_KEY_PARAM = "api_key";
     public static final String IMAGE_SIZE = "w185";
-
-    public static final String DETAIL_TO_REVIEW= "detail_to_review";
 
 }

@@ -20,7 +20,6 @@ public class TheMovieDbJsonUtils {
         ArrayList<Movies> movieList = new ArrayList<>();
 
 
-
         if (responseFromAPI != null) {
 
             JSONObject reader = new JSONObject(responseFromAPI);

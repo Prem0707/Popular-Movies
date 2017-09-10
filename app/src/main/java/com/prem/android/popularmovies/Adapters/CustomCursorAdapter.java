@@ -21,7 +21,7 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
 
     // Class variables for the Cursor that holds task data and the Context
     private Cursor mCursor;
-    private Context mContext;
+    private final Context mContext;
 
     /**
      * Constructor for the CustomCursorAdapter that initializes the Context.
@@ -52,7 +52,7 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
     /**
      * Called by the RecyclerView to display data at a specified position in the Cursor.
      *
-     * @param holder The ViewHolder to bind Cursor data to
+     * @param holder   The ViewHolder to bind Cursor data to
      * @param position The position of the data in the Cursor
      */
     @Override
