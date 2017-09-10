@@ -2,6 +2,7 @@ package com.prem.android.popularmovies;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -38,6 +39,8 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.prem.android.popularmovies.Data.MovieContract.MovieEntry.CONTENT_URI;
 
 
 public class DetailActivity extends AppCompatActivity implements
@@ -81,7 +84,6 @@ public class DetailActivity extends AppCompatActivity implements
         mTrailers_1.setOnClickListener(this);
         mTrailers_2.setOnClickListener(this);
         mTrailers_3.setOnClickListener(this);
-        mToggleButton.setChecked(false); // set the current state of a toggle button
         mToggleButton.setOnCheckedChangeListener(this);
 
         // Populating views
@@ -93,9 +95,10 @@ public class DetailActivity extends AppCompatActivity implements
         mOverview.setText(currentMovie.getOverview());
         this.mMovieId = Integer.toString(currentMovie.getmMovieId());
 
-        // AsyncTask for Trailers
-        AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
-        asyncReuse.execute(mMovieId);
+            // AsyncTask for Trailers
+            AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
+            asyncReuse.execute(mMovieId);
+
 
         // Loader for Reviews
         Bundle reviewBundle = new Bundle();
@@ -109,8 +112,10 @@ public class DetailActivity extends AppCompatActivity implements
         } else {
             loaderManager.restartLoader(MOVIE_REVIEW_LOADER, reviewBundle,this);
         }
+        SharedPreferences shared = getSharedPreferences("FAVORITE", MODE_PRIVATE);
+        boolean state = shared.contains(String.valueOf(currentMovie.getmMovieId()));
+        mToggleButton.setChecked(state);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem menu){
         int id = menu.getItemId();
@@ -267,27 +272,39 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean isChacked) {
 
+        boolean state = compoundButton.isChecked();
+        Long favMovieId =Long.parseLong(String.valueOf(currentMovie.getmMovieId()));
 
-        if(!isChacked){
+        if(state){
+            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+            SharedPreferences.Editor editor = favorite.edit();
+            editor.putLong(favMovieId.toString(),favMovieId);
+            editor.commit();
 
-            Toast.makeText(this, "Here is favourite is false", Toast.LENGTH_LONG).show();
-           /* int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
-                   ,null,null);*/
-        } else{
-
-             ContentValues contentValues = new ContentValues();
-             contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
-             contentValues.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, currentMovie.getPoster());
-             contentValues.put(MovieContract.MovieEntry.MOVIE_TITLE, currentMovie.getTitle());
-             contentValues.put(MovieContract.MovieEntry.MOVIE_DESCRIPTION, currentMovie.getTitle());
-             contentValues.put(MovieContract.MovieEntry.MOVIE_RATING, currentMovie.getUserRating());
-             contentValues.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, currentMovie.getPoster());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_TITLE, currentMovie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_DESCRIPTION, currentMovie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_RATING, currentMovie.getUserRating());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
 
             // Insert the content values via a ContentResolver
-             Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+            Uri uri = getContentResolver().insert(CONTENT_URI, contentValues);
 
             //  Don't forget to call finish() to return to MainActivity after this insert is complete
             Toast.makeText(getApplicationContext(),uri.toString() , Toast.LENGTH_LONG).show();
+
+
+        } else{
+
+            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+            SharedPreferences.Editor editor = favorite.edit();
+            editor.remove(favMovieId.toString());
+            editor.commit();
+            Toast.makeText(this, "Here is favourite is false", Toast.LENGTH_LONG).show();
+           /* int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
+                   ,null,null);*/
         }
     }
 }

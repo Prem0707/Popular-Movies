@@ -29,12 +29,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
+public class
+
+MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static MovieAdapter mMovieAdapter;
     public static GridLayoutManager mGridLayoutManager;
     private static final String POPULAR_MOVIES_LOADER = "22";
+    ArrayList<Movies> mMovieData;
+    ArrayList<Movies> moviesList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle bundleOutState){
+        bundleOutState.putParcelableArrayList("mMovieData", moviesList);
+        super.onSaveInstanceState(bundleOutState);
+
     }
 
     @Override
@@ -178,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> moviesList) {
+        this.moviesList = moviesList;
         mMovieAdapter.setMovieList(moviesList);
         mGridLayoutManager.scrollToPositionWithOffset(0, 0);
     }

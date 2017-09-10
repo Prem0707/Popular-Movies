@@ -12,7 +12,7 @@ import android.provider.BaseColumns;
 public class MovieContract {
 
     // Content Authority
-    public static final String CONTENT_AUTHORITY = "";
+    public static final String CONTENT_AUTHORITY = "com.prem.android.popularmovies";
 
     /**
      * The content authority is used to create the base of all URIs which apps will use to

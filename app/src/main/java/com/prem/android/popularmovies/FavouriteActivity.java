@@ -123,7 +123,7 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
                             null,
                             null,
                             null,
-                            MovieContract.MovieEntry.MOVIE_RATING);
+                            MovieContract.MovieEntry.MOVIE_ID);
 
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to asynchronously load data.");

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.prem.android.popularmovies.Data.MovieContract;
 import com.prem.android.popularmovies.R;
+import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -21,7 +22,6 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
     // Class variables for the Cursor that holds task data and the Context
     private Cursor mCursor;
     private Context mContext;
-
 
     /**
      * Constructor for the CustomCursorAdapter that initializes the Context.
@@ -65,9 +65,11 @@ public class CustomCursorAdapter extends RecyclerView.Adapter<CustomCursorAdapte
 
         // Determine the values of the wanted data
         String posterPath = mCursor.getString(posterPathIndex);
+        //Build picasso url
+        String picassoImageUrl = NetworkUtils.buildPicassoUrl(posterPath);
 
         //Set image
-        Picasso.with(mContext).load(posterPath).into(holder.mMovieImageView);
+        Picasso.with(mContext).load(picassoImageUrl).into(holder.mMovieImageView);
     }
 
     /**
