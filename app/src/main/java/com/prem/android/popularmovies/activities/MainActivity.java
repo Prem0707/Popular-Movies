@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         return new AsyncTaskLoader<ArrayList<Movies>>(this) {
 
+            private ArrayList<Movies> moviesList = null;
 
 
             @Override
