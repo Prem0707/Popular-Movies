@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Data;
+package com.prem.android.popularmovies.data;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -156,6 +156,17 @@ public class MovieProvider extends ContentProvider {
             case MOVIE:
                 rows = db.delete(MovieContract.TABLE_MOVIE_NAME, s, strings);
                 break;
+
+            case MOVIE_ID:
+
+                // Get the task ID from the URI path
+                String id = uri.getPathSegments().get(1);
+
+                // Use selections/selectionArgs to filter for this ID
+                rows = db.delete(MovieContract.TABLE_MOVIE_NAME, "_id=?", new String[]{id});
+
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }

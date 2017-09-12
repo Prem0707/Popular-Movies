@@ -1,8 +1,9 @@
-package com.prem.android.popularmovies;
+package com.prem.android.popularmovies.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -15,10 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.prem.android.popularmovies.Adapters.MovieAdapter;
-import com.prem.android.popularmovies.Json_Parser.TheMovieDbJsonUtils;
-import com.prem.android.popularmovies.Models.Movies;
-import com.prem.android.popularmovies.SharedPref.UserPreference;
+import com.prem.android.popularmovies.R;
+import com.prem.android.popularmovies.adapters.MovieAdapter;
+import com.prem.android.popularmovies.json_parser.TheMovieDbJsonUtils;
+import com.prem.android.popularmovies.models.Movies;
+import com.prem.android.popularmovies.sharedpref.UserPreference;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 import com.prem.android.popularmovies.utils.Constants;
 import com.prem.android.popularmovies.utils.NetworkUtils;
@@ -29,15 +31,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class
-
-MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
+        LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static MovieAdapter mMovieAdapter;
     private static GridLayoutManager mGridLayoutManager;
     private static final String POPULAR_MOVIES_LOADER = "22";
     private ArrayList<Movies> moviesList;
+    RecyclerView mRecyclerView;
+    Parcelable state;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,36 +48,50 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        try {
-            String sharedPrefByUser = UserPreference.getSharedPref(this);
-            fetchMoviesIfDeviceOnline(sharedPrefByUser);
-        } catch (NullPointerException e) {
-            fetchMoviesIfDeviceOnline(Constants.POPULAR_MOVIES_SORT_SELECTION);
-        }
-
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
 
         if (mRecyclerView != null) {
             mRecyclerView.setLayoutManager(mGridLayoutManager);
             mMovieAdapter = new MovieAdapter(this);
-            mRecyclerView.setAdapter(mMovieAdapter);
+            mRecyclerView.setAdapter(mMovieAdapter);}
+
+        if( savedInstanceState != null){
+            Toast.makeText(this, "No need to call API",Toast.LENGTH_SHORT).show();
+            ArrayList<Movies> moviesArrayList = savedInstanceState.getParcelableArrayList("MovieData");
+            mMovieAdapter.setMovieList(moviesArrayList);
+            mGridLayoutManager.scrollToPositionWithOffset(0, 0);
+        }else {
+            try {
+                Toast.makeText(this, "Going to call API",Toast.LENGTH_SHORT).show();
+                String sharedPrefByUser = UserPreference.getSharedPref(this);
+                fetchMoviesIfDeviceOnline(sharedPrefByUser);
+            } catch (NullPointerException e) {
+                fetchMoviesIfDeviceOnline(Constants.TOP_RATED_MOVIES_SORT_SELECTION);
+            }
         }
 
     }
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(this, "In Pause",Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+        Toast.makeText(this, "In Resume",Toast.LENGTH_SHORT).show();
+        mGridLayoutManager.onRestoreInstanceState(state);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle bundleOutState) {
-        bundleOutState.putParcelableArrayList("mMovieData", moviesList);
+    public void onSaveInstanceState(Bundle bundleOutState) {
+        bundleOutState.putParcelableArrayList("MovieData", moviesList);
         super.onSaveInstanceState(bundleOutState);
+        state = mGridLayoutManager.onSaveInstanceState();
 
     }
 
@@ -95,9 +111,11 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.most_popular) {
+            Toast.makeText(this, "Most Popular", Toast.LENGTH_SHORT).show();
             UserPreference.setSharedPref(Constants.POPULAR_MOVIES_SORT_SELECTION, this);
             return true;
         } else if (id == R.id.most_rated) {
+            Toast.makeText(this, "Top Rated", Toast.LENGTH_SHORT).show();
             UserPreference.setSharedPref(Constants.TOP_RATED_MOVIES_SORT_SELECTION, this);
             return true;
         } else if (id == R.id.favourite_movies) {
@@ -109,7 +127,7 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
     }
 
     // we will only execute the FetchMoviesTask if device online.
-    private void fetchMoviesIfDeviceOnline(String urlEndpoint) {
+    public void fetchMoviesIfDeviceOnline(String urlEndpoint) {
         if (NetworkUtils.checkDeviceOnline(this)) {
 
             Bundle queryBundle = new Bundle();
@@ -141,14 +159,13 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
 
         return new AsyncTaskLoader<ArrayList<Movies>>(this) {
 
-            /* This ArrayList will hold and help cache our  data */
-            ArrayList<Movies> mMoviesData = null;
+
 
             @Override
             public void onStartLoading() {
                 super.onStartLoading();
-                if (mMoviesData != null) {
-                    deliverResult(mMoviesData);
+                if (moviesList != null) {
+                    deliverResult(moviesList);
                 } else {
                     forceLoad();
                 }
@@ -181,7 +198,7 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
              * @param data The result of the load
              */
             public void deliverResult(ArrayList<Movies> data) {
-                mMoviesData = data;
+                moviesList = data;
                 super.deliverResult(data);
             }
         };
@@ -208,8 +225,17 @@ MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnCli
 
     //This is a listener that will update the UI when sorting criteria will change
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         String sharedPrefByUser = UserPreference.getSharedPref(this);
+        Toast.makeText(this, "Preference Changed" + sharedPrefByUser, Toast.LENGTH_SHORT).show();
         fetchMoviesIfDeviceOnline(sharedPrefByUser);
     }
+
+    //This is a listener that will update the UI when sorting criteria will change
+    /*@Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Toast.makeText(this, "Preference Changed", Toast.LENGTH_SHORT).show();
+        String sharedPrefByUser = UserPreference.getSharedPref(this);
+        fetchMoviesIfDeviceOnline(sharedPrefByUser);
+    }*/
 }

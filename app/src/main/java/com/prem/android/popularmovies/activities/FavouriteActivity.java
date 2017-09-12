@@ -1,7 +1,8 @@
-package com.prem.android.popularmovies;
+package com.prem.android.popularmovies.activities;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
@@ -12,8 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.prem.android.popularmovies.Adapters.CustomCursorAdapter;
-import com.prem.android.popularmovies.Data.MovieContract;
+import com.prem.android.popularmovies.adapters.CustomCursorAdapter;
+import com.prem.android.popularmovies.data.MovieContract;
+import com.prem.android.popularmovies.R;
 import com.prem.android.popularmovies.utils.CheckOrientation;
 
 public class FavouriteActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -23,9 +25,12 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
     private static final int TASK_LOADER_ID = 0;
 
 
-
+    RecyclerView mRecyclerView;
+    GridLayoutManager mGridLayoutManager;
     // Member variables for the adapter and RecyclerView
     private CustomCursorAdapter mAdapter;
+    Parcelable state;
+    Cursor mTaskData = null;
 
 
     @Override
@@ -39,8 +44,8 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        GridLayoutManager mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
 
 
         // Set the layout for the RecyclerView to be a linear layout, which measures and
@@ -56,6 +61,12 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
          created, otherwise the last created loader is re-used.
          */
         getSupportLoaderManager().initLoader(TASK_LOADER_ID, null, FavouriteActivity.this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        state = mGridLayoutManager.onSaveInstanceState();
     }
 
     @Override
@@ -77,8 +88,13 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
     protected void onResume() {
         super.onResume();
 
+        mGridLayoutManager.onRestoreInstanceState(state);
         // re-queries for all tasks
-        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+        if(mTaskData == null) {
+            getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+        }else{
+            mAdapter.swapCursor(mTaskData);
+        }
     }
 
 
@@ -92,9 +108,6 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
     public Loader<Cursor> onCreateLoader(int id, final Bundle loaderArgs) {
 
         return new AsyncTaskLoader<Cursor>(this) {
-
-            // Initialize a Cursor, this will hold all the task data
-            Cursor mTaskData = null;
 
             // onStartLoading() is called when a loader first starts loading data
             @Override

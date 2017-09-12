@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.SharedPref;
+package com.prem.android.popularmovies.sharedpref;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,6 +18,6 @@ public class UserPreference {
 
     public static String getSharedPref(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString("SORT_ACCORDING_TO_USER_PREF", null);
+        return preferences.getString("SORT_ACCORDING_TO_USER_PREF","popular");
     }
 }

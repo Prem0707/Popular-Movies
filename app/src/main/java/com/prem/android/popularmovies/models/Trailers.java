@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Models;
+package com.prem.android.popularmovies.models;
 
 /**
  * Created by Prem on 05-09-2017.

@@ -1,6 +1,6 @@
-package com.prem.android.popularmovies.Json_Parser;
+package com.prem.android.popularmovies.json_parser;
 
-import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.models.Movies;
 import com.prem.android.popularmovies.utils.Constants;
 
 import org.json.JSONArray;

@@ -1,7 +1,7 @@
-package com.prem.android.popularmovies.Json_Parser;
+package com.prem.android.popularmovies.json_parser;
 
 
-import com.prem.android.popularmovies.Models.Reviews;
+import com.prem.android.popularmovies.models.Reviews;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,6 +1,6 @@
-package com.prem.android.popularmovies.Interfaces;
+package com.prem.android.popularmovies.interfaces;
 
-import com.prem.android.popularmovies.Models.Trailers;
+import com.prem.android.popularmovies.models.Trailers;
 
 import java.util.ArrayList;
 

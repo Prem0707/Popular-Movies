@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Adapters;
+package com.prem.android.popularmovies.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.prem.android.popularmovies.Data.MovieContract;
+import com.prem.android.popularmovies.data.MovieContract;
 import com.prem.android.popularmovies.R;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;

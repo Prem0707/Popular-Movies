@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Adapters;
+package com.prem.android.popularmovies.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.prem.android.popularmovies.Models.Movies;
+import com.prem.android.popularmovies.models.Movies;
 import com.prem.android.popularmovies.R;
 import com.prem.android.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Picasso;

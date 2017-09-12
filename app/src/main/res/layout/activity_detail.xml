@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context=".DetailActivity">
+    tools:context=".activities.DetailActivity">
 
     <TextView
         android:id="@+id/movie_title"
@@ -23,6 +23,7 @@
         android:textStyle="bold" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -76,15 +77,21 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/black" />
 
-            <ToggleButton
-                android:id="@+id/favourite_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
+            <Button
+                android:text="MAKE AS FAVOURITE"
+                android:id="@+id/mark_as_favourite"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
-                android:textColor="#f00"
-                android:textOff="@string/mark_as_favourite"
-                android:textOn="@string/favourite" />
+                android:visibility="invisible"/>
+
+            <Button
+                android:text="REMOVE FROM FAVOURITE"
+                android:id="@+id/remove_from_favourite"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible"/>
 
             <TextView
                 android:layout_width="match_parent"

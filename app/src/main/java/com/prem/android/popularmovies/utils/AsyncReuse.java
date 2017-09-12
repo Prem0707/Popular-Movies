@@ -3,9 +3,9 @@ package com.prem.android.popularmovies.utils;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.prem.android.popularmovies.Interfaces.TaskCompleted;
-import com.prem.android.popularmovies.Json_Parser.TrailerJsonParser;
-import com.prem.android.popularmovies.Models.Trailers;
+import com.prem.android.popularmovies.interfaces.TaskCompleted;
+import com.prem.android.popularmovies.json_parser.TrailerJsonParser;
+import com.prem.android.popularmovies.models.Trailers;
 
 import org.json.JSONException;
 

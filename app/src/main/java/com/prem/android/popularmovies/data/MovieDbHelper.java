@@ -1,4 +1,4 @@
-package com.prem.android.popularmovies.Data;
+package com.prem.android.popularmovies.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
