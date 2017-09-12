@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.AsyncTaskLoader;
@@ -14,10 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.prem.android.popularmovies.R;
 import com.prem.android.popularmovies.data.MovieContract;
@@ -46,7 +47,7 @@ import static com.prem.android.popularmovies.data.MovieContract.MovieEntry.CONTE
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Reviews>>, TaskCompleted,
-        View.OnClickListener {
+        View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     private String mMovieId;
     private static String ID_OF_MOVIE;
@@ -69,16 +70,14 @@ public class DetailActivity extends AppCompatActivity implements
     TextView mRating;
     @BindView(R.id.review_of_movie)
     TextView mReviewMovies;
-    @BindView(R.id.mark_as_favourite)
-    Button mFavouriteButton;
-    @BindView(R.id.remove_from_favourite)
-    Button mRemoveFromFavourite;
     @BindView(R.id.trailer_1)
     Button mTrailers_1;
     @BindView(R.id.trailer_2)
     Button mTrailers_2;
     @BindView(R.id.trailer_3)
     Button mTrailers_3;
+    @BindView(R.id.favourite_btn)
+    ToggleButton favoriteButton;
     private ScrollView mScrollView;
 
     @Override
@@ -94,6 +93,7 @@ public class DetailActivity extends AppCompatActivity implements
 
         if (savedInstanceState == null || !savedInstanceState.containsKey("movieDetails")) {
             Intent intentThatStartedActivity = getIntent();
+
             this.currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
         } else {
             this.currentMovie = savedInstanceState.getParcelable("movieDetails");
@@ -101,8 +101,7 @@ public class DetailActivity extends AppCompatActivity implements
         mTrailers_1.setOnClickListener(this);
         mTrailers_2.setOnClickListener(this);
         mTrailers_3.setOnClickListener(this);
-        mFavouriteButton.setOnClickListener(this);
-        mRemoveFromFavourite.setOnClickListener(this);
+        favoriteButton.setOnCheckedChangeListener(this);
 
         // Populating views
         if (currentMovie != null) {
@@ -141,14 +140,9 @@ public class DetailActivity extends AppCompatActivity implements
             mReviewMovies.setText(stringReviews);
         }
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPreferences.getString("FAV", "nothing").equals("unfavourite")) {
-            mFavouriteButton.setVisibility(View.INVISIBLE);
-            mRemoveFromFavourite.setVisibility(View.VISIBLE);
-        } else{
-            mRemoveFromFavourite.setVisibility(View.INVISIBLE);
-            mFavouriteButton.setVisibility(View.VISIBLE);
-        }
+        SharedPreferences shared = getSharedPreferences("FAVORITE", MODE_PRIVATE);
+        boolean state = shared.contains(mMovieId);
+        favoriteButton.setChecked(state);
     }
 
     @Override
@@ -156,6 +150,7 @@ public class DetailActivity extends AppCompatActivity implements
         outState.putParcelable("movieDetails", currentMovie);
         outState.putString("movieReviews", stringReviews);
         outState.putStringArrayList("mVideoId", idOfVideos);
+        outState.putString("MovieId",mMovieId);
         mScrollView = (ScrollView) findViewById(R.id.scrollView);
         outState.putIntArray("ARTICLE_SCROLL_POSITION",
                 new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
@@ -283,8 +278,7 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View view) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+
         switch (view.getId()) {
 
             case R.id.trailer_1:
@@ -308,38 +302,6 @@ public class DetailActivity extends AppCompatActivity implements
                     playVideo(idOfVideos.get(0));
                 }
                 break;
-
-            case R.id.mark_as_favourite:
-                mFavouriteButton.setVisibility(View.GONE);
-                mRemoveFromFavourite.setVisibility(View.VISIBLE);
-                editor.putString("FAV", "unfavourite");
-                editor.apply();
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
-                contentValues.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, currentMovie.getPoster());
-                contentValues.put(MovieContract.MovieEntry.MOVIE_TITLE, currentMovie.getTitle());
-                contentValues.put(MovieContract.MovieEntry.MOVIE_DESCRIPTION, currentMovie.getTitle());
-                contentValues.put(MovieContract.MovieEntry.MOVIE_RATING, currentMovie.getUserRating());
-                contentValues.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
-
-                // Insert the content values via a ContentResolver
-                Uri uri = getContentResolver().insert(CONTENT_URI, contentValues);
-
-                //  Don't forget to call finish() to return to MainActivity after this insert is complete
-                Toast.makeText(getApplicationContext(), uri != null ? uri.toString() : null, Toast.LENGTH_LONG).show();
-
-                break;
-
-            case R.id.remove_from_favourite:
-                mFavouriteButton.setVisibility(View.VISIBLE);
-                mRemoveFromFavourite.setVisibility(View.GONE);
-                editor.remove("FAV");
-                editor.commit();
-                int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
-                        , null, null);
-                Toast.makeText(this, "The movie removed with id = " + id, Toast.LENGTH_LONG).show();
-                break;
-
         }
     }
 
@@ -354,5 +316,42 @@ public class DetailActivity extends AppCompatActivity implements
                     Uri.parse("http://www.youtube.com/watch?v=" + key));
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        boolean favOrNot=buttonView.isChecked();
+        Long favId=Long.parseLong(mMovieId);
+
+        if (favOrNot){
+            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+            SharedPreferences.Editor editor = favorite.edit();
+            editor.putLong(favId.toString(),favId);
+            editor.commit();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, currentMovie.getPoster());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_TITLE, currentMovie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_DESCRIPTION, currentMovie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_RATING, currentMovie.getUserRating());
+            contentValues.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
+
+            // Insert the content values via a ContentResolver
+            Uri uri = getContentResolver().insert(CONTENT_URI, contentValues);
+
+            //  Don't forget to call finish() to return to MainActivity after this insert is complete
+            Toast.makeText(getApplicationContext(), uri != null ? uri.toString() : null, Toast.LENGTH_LONG).show();
+        }
+        else{
+            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+            SharedPreferences.Editor editor = favorite.edit();
+            editor.remove(favId.toString());
+            editor.commit();
+
+            int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
+                    , null, null);
+            Toast.makeText(this, "The movie removed with id = " + id, Toast.LENGTH_LONG).show();
+        }
+
     }
 }
