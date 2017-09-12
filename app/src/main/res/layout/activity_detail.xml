@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--suppress XmlUnusedNamespaceDeclaration -->
+<?xml version="1.0" encoding="utf-8"?><!--suppress XmlUnusedNamespaceDeclaration -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -78,20 +77,20 @@
                 android:textColor="@color/black" />
 
             <Button
-                android:text="MAKE AS FAVOURITE"
                 android:id="@+id/mark_as_favourite"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
-                android:visibility="invisible"/>
+                android:text="@string/make_as_favourite"
+                android:visibility="invisible" />
 
             <Button
-                android:text="REMOVE FROM FAVOURITE"
                 android:id="@+id/remove_from_favourite"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
-                android:visibility="invisible"/>
+                android:text="@string/remove_from_favourite"
+                android:visibility="invisible" />
 
             <TextView
                 android:layout_width="match_parent"

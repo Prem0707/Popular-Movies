@@ -46,7 +46,7 @@ import static com.prem.android.popularmovies.data.MovieContract.MovieEntry.CONTE
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Reviews>>, TaskCompleted,
-        View.OnClickListener{
+        View.OnClickListener {
 
     private String mMovieId;
     private static String ID_OF_MOVIE;
@@ -80,6 +80,7 @@ public class DetailActivity extends AppCompatActivity implements
     @BindView(R.id.trailer_3)
     Button mTrailers_3;
     private ScrollView mScrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,10 +92,10 @@ public class DetailActivity extends AppCompatActivity implements
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        if(savedInstanceState == null || !savedInstanceState.containsKey("movieDetails")) {
+        if (savedInstanceState == null || !savedInstanceState.containsKey("movieDetails")) {
             Intent intentThatStartedActivity = getIntent();
             this.currentMovie = intentThatStartedActivity.getParcelableExtra(Constants.CURRENT_MOVIE_DATA);
-        }else{
+        } else {
             this.currentMovie = savedInstanceState.getParcelable("movieDetails");
         }
         mTrailers_1.setOnClickListener(this);
@@ -114,11 +115,11 @@ public class DetailActivity extends AppCompatActivity implements
             this.mMovieId = Integer.toString(currentMovie.getmMovieId());
         }
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             // AsyncTask for Trailers
             AsyncReuse asyncReuse = new AsyncReuse(DetailActivity.this);
             asyncReuse.execute(mMovieId);
-        }else{
+        } else {
             this.idOfVideos = savedInstanceState.getStringArrayList("mVideoId");
         }
 
@@ -135,16 +136,16 @@ public class DetailActivity extends AppCompatActivity implements
             } else {
                 loaderManager.restartLoader(MOVIE_REVIEW_LOADER, reviewBundle, this);
             }
-        }else{
+        } else {
             stringReviews = savedInstanceState.getString("movieReviews");
             mReviewMovies.setText(stringReviews);
         }
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(sharedPreferences.getString("FAV", "nothing").equals("unfavourite")){
+        if (sharedPreferences.getString("FAV", "nothing").equals("unfavourite")) {
             mFavouriteButton.setVisibility(View.INVISIBLE);
             mRemoveFromFavourite.setVisibility(View.VISIBLE);
-        }else {
+        } else{
             mRemoveFromFavourite.setVisibility(View.INVISIBLE);
             mFavouriteButton.setVisibility(View.VISIBLE);
         }
@@ -153,11 +154,11 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelable("movieDetails", currentMovie);
-        outState.putString("movieReviews",stringReviews);
-        outState.putStringArrayList("mVideoId",idOfVideos);
+        outState.putString("movieReviews", stringReviews);
+        outState.putStringArrayList("mVideoId", idOfVideos);
         mScrollView = (ScrollView) findViewById(R.id.scrollView);
         outState.putIntArray("ARTICLE_SCROLL_POSITION",
-                new int[]{ mScrollView.getScrollX(), mScrollView.getScrollY()});
+                new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
         super.onSaveInstanceState(outState);
     }
 
@@ -165,7 +166,7 @@ public class DetailActivity extends AppCompatActivity implements
         super.onRestoreInstanceState(savedInstanceState);
         final int[] position = savedInstanceState.getIntArray("ARTICLE_SCROLL_POSITION");
         mScrollView = (ScrollView) findViewById(R.id.scrollView);
-        if(position != null)
+        if (position != null)
             mScrollView.post(new Runnable() {
                 public void run() {
                     mScrollView.scrollTo(position[0], position[1]);
@@ -311,7 +312,7 @@ public class DetailActivity extends AppCompatActivity implements
             case R.id.mark_as_favourite:
                 mFavouriteButton.setVisibility(View.GONE);
                 mRemoveFromFavourite.setVisibility(View.VISIBLE);
-                editor.putString("FAV","unfavourite");
+                editor.putString("FAV", "unfavourite");
                 editor.apply();
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
@@ -334,7 +335,7 @@ public class DetailActivity extends AppCompatActivity implements
                 mRemoveFromFavourite.setVisibility(View.GONE);
                 editor.remove("FAV");
                 editor.commit();
-                int id = getContentResolver().delete( MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
+                int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
                         , null, null);
                 Toast.makeText(this, "The movie removed with id = " + id, Toast.LENGTH_LONG).show();
                 break;
