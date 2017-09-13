@@ -53,8 +53,8 @@ public class DetailActivity extends AppCompatActivity implements
     private static String ID_OF_MOVIE;
     private static final int MOVIE_REVIEW_LOADER = 10;
     private Movies currentMovie;
-    ArrayList<Reviews> mReviews;
-    String stringReviews = null;
+    private ArrayList<Reviews> mReviews;
+    private String stringReviews = null;
 
     private ArrayList<String> idOfVideos = new ArrayList<>();
 
@@ -101,7 +101,7 @@ public class DetailActivity extends AppCompatActivity implements
         mTrailers_1.setOnClickListener(this);
         mTrailers_2.setOnClickListener(this);
         mTrailers_3.setOnClickListener(this);
-        favoriteButton.setOnCheckedChangeListener(this);
+
 
         // Populating views
         if (currentMovie != null) {
@@ -143,6 +143,7 @@ public class DetailActivity extends AppCompatActivity implements
         SharedPreferences shared = getSharedPreferences("FAVORITE", MODE_PRIVATE);
         boolean state = shared.contains(mMovieId);
         favoriteButton.setChecked(state);
+        favoriteButton.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -327,7 +328,7 @@ public class DetailActivity extends AppCompatActivity implements
             SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
             SharedPreferences.Editor editor = favorite.edit();
             editor.putLong(favId.toString(),favId);
-            editor.commit();
+            editor.apply();
             ContentValues contentValues = new ContentValues();
             contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
             contentValues.put(MovieContract.MovieEntry.MOVIE_POSTER_PATH, currentMovie.getPoster());
@@ -346,7 +347,7 @@ public class DetailActivity extends AppCompatActivity implements
             SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
             SharedPreferences.Editor editor = favorite.edit();
             editor.remove(favId.toString());
-            editor.commit();
+            editor.apply();
 
             int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
                     , null, null);

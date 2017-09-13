@@ -7,8 +7,6 @@
 
     <!-- Strings Used by Preferences-->
 
-    <string name="mark_as_favourite">Mark As Favourite</string>
-    <string name="favourite">Favourite</string>
     <string name="trailers">Trailers:</string>
     <string name="trailer_1">Trailer 1</string>
     <string name="trailer_2">Trailer 2</string>
@@ -20,5 +18,7 @@
     <string name="sort_by_popularity">Sort By Popularity</string>
     <string name="make_as_favourite">MAKE AS FAVOURITE</string>
     <string name="remove_from_favourite">REMOVE FROM FAVOURITE</string>
+    <string name="mark_asfavourite">Mark AsFavourite</string>
+    <string name="favorite">FAVORITE</string>
 
 </resources>

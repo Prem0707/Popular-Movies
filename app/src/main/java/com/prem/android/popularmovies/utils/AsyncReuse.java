@@ -18,11 +18,9 @@ import java.util.ArrayList;
  */
 public class AsyncReuse extends AsyncTask<String, Void, ArrayList<Trailers>> {
 
-    private final Context mContext;
     private final TaskCompleted mCallback;
 
     public AsyncReuse(Context context) {
-        this.mContext = context;
         this.mCallback = (TaskCompleted) context;
 
     }

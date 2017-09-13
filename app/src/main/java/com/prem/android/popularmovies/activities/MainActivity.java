@@ -33,8 +33,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static MovieAdapter mMovieAdapter;
-    private static GridLayoutManager mGridLayoutManager;
     private static final String POPULAR_MOVIES_LOADER = "22";
     private ArrayList<Movies> moviesList;
     RecyclerView mRecyclerView;
@@ -108,13 +106,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     // we will only execute the FetchMoviesTask if device online.
-    public void fetchMoviesIfDeviceOnline(String urlEndpoint) {
+    private void fetchMoviesIfDeviceOnline(String urlEndpoint) {
         if (NetworkUtils.checkDeviceOnline(this)) {
 
             Bundle queryBundle = new Bundle();
             queryBundle.putString(String.valueOf(POPULAR_MOVIES_LOADER), urlEndpoint);
             LoaderManager loaderManager = getSupportLoaderManager();
-            Loader<ArrayList<Movies>> popMoviesLoader = loaderManager.getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
+            loaderManager.getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
 
             loaderManager.initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
         } else {
@@ -186,9 +184,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onLoadFinished(Loader<ArrayList<Movies>> loader, ArrayList<Movies> moviesList) {
         this.moviesList = moviesList;
-        mMovieAdapter = new MovieAdapter(this);
+        MovieAdapter mMovieAdapter = new MovieAdapter(this);
         mMovieAdapter.setMovieList(moviesList);
-        mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
+        GridLayoutManager mGridLayoutManager = CheckOrientation.gridLayoutManagerAccordingToOrientation(this);
         mGridLayoutManager.scrollToPositionWithOffset(0, 0);
 
         mRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -220,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Bundle queryBundle = new Bundle();
         queryBundle.putString(String.valueOf(POPULAR_MOVIES_LOADER), urlEndpoint);
 
-        Loader<ArrayList<Movies>> popMoviesLoader = getSupportLoaderManager().getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
+        getSupportLoaderManager().getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
 
         getSupportLoaderManager().initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
     }
