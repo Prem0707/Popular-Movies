@@ -349,9 +349,9 @@ public class DetailActivity extends AppCompatActivity implements
             editor.remove(favId.toString());
             editor.apply();
 
-            int id = getContentResolver().delete(MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId())
-                    , null, null);
-            Toast.makeText(this, "The movie removed with id = " + id, Toast.LENGTH_LONG).show();
+            Uri uri = MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId());
+            int id = getContentResolver().delete(uri, null, null);
+            Toast.makeText(this,"The movie removed with id = " + id, Toast.LENGTH_LONG).show();
         }
 
     }
