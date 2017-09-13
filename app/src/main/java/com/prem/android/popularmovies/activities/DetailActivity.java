@@ -1,9 +1,12 @@
 package com.prem.android.popularmovies.activities;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
@@ -47,7 +50,7 @@ import static com.prem.android.popularmovies.data.MovieContract.MovieEntry.CONTE
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<ArrayList<Reviews>>, TaskCompleted,
-        View.OnClickListener, CompoundButton.OnCheckedChangeListener{
+        View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
     private String mMovieId;
     private static String ID_OF_MOVIE;
@@ -55,6 +58,8 @@ public class DetailActivity extends AppCompatActivity implements
     private Movies currentMovie;
     private ArrayList<Reviews> mReviews;
     private String stringReviews = null;
+    boolean mMovieInFavourites;
+    boolean stateOfFavourite;
 
     private ArrayList<String> idOfVideos = new ArrayList<>();
 
@@ -140,10 +145,26 @@ public class DetailActivity extends AppCompatActivity implements
             mReviewMovies.setText(stringReviews);
         }
 
-        SharedPreferences shared = getSharedPreferences("FAVORITE", MODE_PRIVATE);
-        boolean state = shared.contains(mMovieId);
-        favoriteButton.setChecked(state);
+        if (savedInstanceState == null) {
+            //Run the database operation to get the cursor off of the main thread
+            new FavouriteMovieTask().execute(mMovieId);
+            favoriteButton.setChecked(mMovieInFavourites);
+        } else {
+            stateOfFavourite = savedInstanceState.getBoolean("mmMovieFav", false);
+            favoriteButton.setChecked(stateOfFavourite);
+        }
+
+
+//        if (stateOfFavourite) {
+//            favoriteButton.setChecked(true);
+//        }else{
+//       SharedPreferences shared = getSharedPreferences("FAVORITE", MODE_PRIVATE);
+//        boolean state = shared.contains(mMovieId);
+//        favoriteButton.setChecked(state);}
+
         favoriteButton.setOnCheckedChangeListener(this);
+
+
     }
 
     @Override
@@ -151,7 +172,8 @@ public class DetailActivity extends AppCompatActivity implements
         outState.putParcelable("movieDetails", currentMovie);
         outState.putString("movieReviews", stringReviews);
         outState.putStringArrayList("mVideoId", idOfVideos);
-        outState.putString("MovieId",mMovieId);
+        outState.putString("MovieId", mMovieId);
+        outState.putBoolean("mMovieFav", mMovieInFavourites);
         mScrollView = (ScrollView) findViewById(R.id.scrollView);
         outState.putIntArray("ARTICLE_SCROLL_POSITION",
                 new int[]{mScrollView.getScrollX(), mScrollView.getScrollY()});
@@ -321,13 +343,13 @@ public class DetailActivity extends AppCompatActivity implements
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        boolean favOrNot=buttonView.isChecked();
-        Long favId=Long.parseLong(mMovieId);
+        boolean favOrNot = buttonView.isChecked();
+        Long favId = Long.parseLong(mMovieId);
 
-        if (favOrNot){
-            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+        if (favOrNot) {
+            SharedPreferences favorite = getSharedPreferences("FAVORITE", MODE_PRIVATE);
             SharedPreferences.Editor editor = favorite.edit();
-            editor.putLong(favId.toString(),favId);
+            editor.putLong(favId.toString(), favId);
             editor.apply();
             ContentValues contentValues = new ContentValues();
             contentValues.put(MovieContract.MovieEntry.MOVIE_ID, currentMovie.getmMovieId());
@@ -342,16 +364,44 @@ public class DetailActivity extends AppCompatActivity implements
 
             //  Don't forget to call finish() to return to MainActivity after this insert is complete
             Toast.makeText(getApplicationContext(), uri != null ? uri.toString() : null, Toast.LENGTH_LONG).show();
-        }
-        else{
-            SharedPreferences favorite = getSharedPreferences("FAVORITE",MODE_PRIVATE);
+        } else {
+            SharedPreferences favorite = getSharedPreferences("FAVORITE", MODE_PRIVATE);
             SharedPreferences.Editor editor = favorite.edit();
             editor.remove(favId.toString());
             editor.apply();
 
             Uri uri = MovieContract.MovieEntry.buildMovieUri(currentMovie.getmMovieId());
-            int id = getContentResolver().delete(uri, null, null);
-            Toast.makeText(this,"The movie removed with id = " + id, Toast.LENGTH_LONG).show();
+            int id = getContentResolver().delete(//MovieContract.MovieEntry.CONTENT_URI
+                    uri
+                    , null, null);
+            Toast.makeText(this, "The movie removed with id = " + id, Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    // Use an async task to do the data fetch off of the main thread.
+    public class FavouriteMovieTask extends AsyncTask<String, Void, Cursor> {
+
+        // Invoked on a background thread
+        @Override
+        protected Cursor doInBackground(String... strings) {
+            // Make the query to get the data
+
+            // Get the content resolver
+            ContentResolver resolver = getContentResolver();
+            Uri uri = MovieContract.MovieEntry.buildMovieUri(Long.parseLong(mMovieId));
+
+            // Call the query method on the resolver with the correct Uri from the contract class
+            return resolver.query(uri, null, null, null, null);
+        }
+
+        // Invoked on UI thread
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            super.onPostExecute(cursor);
+            mMovieInFavourites = cursor.moveToNext();
+            // close the cursor;
+            cursor.close();
         }
 
     }

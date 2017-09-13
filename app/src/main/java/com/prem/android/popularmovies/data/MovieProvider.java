@@ -164,6 +164,8 @@ public class MovieProvider extends ContentProvider {
 
                 // Use selections/selectionArgs to filter for this ID
                 rows = db.delete(MovieContract.TABLE_MOVIE_NAME, "_id=?", new String[]{id});
+                // The question mark indicates that this is asking for the rest of the equality
+                // from the new String[]{id} parameter
 
                 break;
 
