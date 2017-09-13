@@ -30,11 +30,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler,
         LoaderManager.LoaderCallbacks<ArrayList<Movies>>, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String POPULAR_MOVIES_LOADER = "22";
     private ArrayList<Movies> moviesList;
+    @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     //Parcelable state;
 
@@ -44,8 +47,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        
         String sharedPrefByUser = UserPreference.getSharedPref(this);
         fetchMoviesIfDeviceOnline(sharedPrefByUser);
 
