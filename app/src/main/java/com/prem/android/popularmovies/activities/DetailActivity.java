@@ -141,7 +141,6 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
         updateFavoriteButtons();
-
     }
 
     @Override
@@ -356,8 +355,9 @@ public class DetailActivity extends AppCompatActivity implements
             protected Void doInBackground(Void... params) {
                 if (isFavorite()) {
 
-                    Uri uri = MovieContract.MovieEntry.buildMovieUri(Long.parseLong(mMovieId));
-                    int id = getContentResolver().delete(uri
+                    String mUri = MovieContract.MovieEntry.CONTENT_URI + "/"+mMovieId;
+                    Uri myUri = Uri.parse(mUri);
+                    int id = getContentResolver().delete(myUri
                             , null, null);
 
                 }
