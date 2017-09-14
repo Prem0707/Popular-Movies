@@ -76,18 +76,22 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/black" />
 
-            <ToggleButton
-                android:id="@+id/favourite_btn"
-                android:layout_width="88dp"
+            <Button
+                android:id="@+id/button_mark_as_favorite"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/light_grey"
-                android:text="@string/mark_asfavourite"
-                android:textColor="@color/colorPrimary"
-                android:textOn="@string/favorite"
-                android:textOff="MARK AS FAVORITE"
-                android:layout_marginBottom="8dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp" />
+
+                android:text="ADD TO FAVOURITES"
+                android:theme="@style/Button.Red"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_remove_from_favorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="REMOVE FROM FAVOURITES"
+                android:theme="@style/Button.Red"
+                android:visibility="gone" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

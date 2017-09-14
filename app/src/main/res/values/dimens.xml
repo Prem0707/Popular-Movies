@@ -9,4 +9,11 @@
     <dimen name="dp300_margin">300dp</dimen>
     <dimen name="passing_12">12dp</dimen>
     <dimen name="padding_8">8dp</dimen>
+
+    <dimen name="button_height">36dp</dimen>
+    <dimen name="button_horizontal_padding">16dp</dimen>
+    <dimen name="button_vertical_padding">0dp</dimen>
+    <dimen name="button_vertical_margin">16dp</dimen>
+    <dimen name="detail_title_left_padding">4dp</dimen>
+    <dimen name="detail_title_bottom_margin">4dp</dimen>
 </resources>
