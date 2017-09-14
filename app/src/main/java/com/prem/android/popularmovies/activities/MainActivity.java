@@ -221,5 +221,4 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         getSupportLoaderManager().initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
     }
-
 }

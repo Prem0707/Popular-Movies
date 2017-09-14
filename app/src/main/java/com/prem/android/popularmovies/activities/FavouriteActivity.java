@@ -25,12 +25,12 @@ public class FavouriteActivity extends AppCompatActivity implements LoaderManage
     private static final int TASK_LOADER_ID = 0;
 
 
-    RecyclerView mRecyclerView;
-    GridLayoutManager mGridLayoutManager;
+    private RecyclerView mRecyclerView;
+    private GridLayoutManager mGridLayoutManager;
     // Member variables for the adapter and RecyclerView
     private CustomCursorAdapter mAdapter;
-    Parcelable state;
-    Cursor mTaskData = null;
+    private Parcelable state;
+    private Cursor mTaskData = null;
 
 
     @Override

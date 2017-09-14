@@ -75,10 +75,10 @@ public class DetailActivity extends AppCompatActivity implements
     @BindView(R.id.trailer_3)
     Button mTrailers_3;
     private ScrollView mScrollView;
-    @BindView(R.id.button_mark_as_favorite)
+    @BindView(R.id.button_for_favorite)
     Button mButtonMarkAsFavorite;
     @BindView(R.id.button_remove_from_favorites)
-    Button mButtonRemoveFromFavorites;
+    Button mButtonRemoveFavorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,7 +317,7 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
 
-    public void markAsFavorite() {
+    private void markAsFavorite() {
 
         new AsyncTask<Void, Void, Void>() {
 
@@ -333,10 +333,10 @@ public class DetailActivity extends AppCompatActivity implements
                     contentValues.put(MovieContract.MovieEntry.MOVIE_RELEASE_DATE, currentMovie.getReleaseDate());
 
                     // Insert the content values via a ContentResolver
-                    Uri uri = getContentResolver().insert(CONTENT_URI, contentValues);
+                    getContentResolver().insert(CONTENT_URI, contentValues);
 
                     //  Don't forget to call finish() to return to MainActivity after this insert is complete
-                   // Toast.makeText(getApplicationContext(), uri != null ? uri.toString() : null, Toast.LENGTH_LONG).show();
+                    // Toast.makeText(getApplicationContext(), uri != null ? uri.toString() : null, Toast.LENGTH_LONG).show();
                 }
                 return null;
             }
@@ -348,17 +348,16 @@ public class DetailActivity extends AppCompatActivity implements
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    public void removeFromFavorites() {
+    private void removeFromFavorites() {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... params) {
                 if (isFavorite()) {
 
-                    String mUri = MovieContract.MovieEntry.CONTENT_URI + "/"+mMovieId;
+                    String mUri = MovieContract.MovieEntry.CONTENT_URI + "/" + mMovieId;
                     Uri myUri = Uri.parse(mUri);
-                    int id = getContentResolver().delete(myUri
-                            , null, null);
+                    getContentResolver().delete(myUri, null, null);
 
                 }
                 return null;
@@ -384,11 +383,11 @@ public class DetailActivity extends AppCompatActivity implements
             @Override
             protected void onPostExecute(Boolean isFavorite) {
                 if (isFavorite) {
-                    mButtonRemoveFromFavorites.setVisibility(View.VISIBLE);
+                    mButtonRemoveFavorites.setVisibility(View.VISIBLE);
                     mButtonMarkAsFavorite.setVisibility(View.GONE);
                 } else {
                     mButtonMarkAsFavorite.setVisibility(View.VISIBLE);
-                    mButtonRemoveFromFavorites.setVisibility(View.GONE);
+                    mButtonRemoveFavorites.setVisibility(View.GONE);
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -401,7 +400,7 @@ public class DetailActivity extends AppCompatActivity implements
                     }
                 });
 
-        mButtonRemoveFromFavorites.setOnClickListener(
+        mButtonRemoveFavorites.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
