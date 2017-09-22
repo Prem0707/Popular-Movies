@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -54,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public void onPause() {
         super.onPause();
-        Toast.makeText(this, "In Pause", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "In Pause", Toast.LENGTH_SHORT).show();
+        Log.d("OnPause","It is under OnPause");
     }
 
     @Override
@@ -174,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
              * @param data The result of the load
              */
             public void deliverResult(ArrayList<Movies> data) {
-                movies = data;
+                this.movies = data;
                 super.deliverResult(data);
             }
         };
@@ -219,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         getSupportLoaderManager().getLoader(Integer.parseInt(POPULAR_MOVIES_LOADER));
 
-        getSupportLoaderManager().initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
+        // getSupportLoaderManager().initLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
+        getSupportLoaderManager().restartLoader(Integer.parseInt(POPULAR_MOVIES_LOADER), queryBundle, this);
     }
 }
