@@ -40,6 +40,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.prem.android.popularmovies.activities.MainActivity" />
         </activity>
+        
+        <-- In order for a content provider to be visible within an Android system, it must be declared 
+            within the Android manifest file for the application in which it resides -->
+            
+            <-- android:authority – The full authority URI of the content provider.
+                
+                android:name – The name of the class that implements the content provider. 
+                In most cases, this will use the same value as the authority. -->
 
         <provider
             android:name="com.prem.android.popularmovies.data.MovieProvider"
