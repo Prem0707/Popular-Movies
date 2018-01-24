@@ -15,7 +15,7 @@ class MovieDbHelper extends SQLiteOpenHelper {
     // If you change the database schema, you must increment the database version
     private static final int DATABASE_VERSION = 1;
 
-    // Constructor
+    // We have to call the construcor and pass the database name so that we can create it
     public MovieDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
